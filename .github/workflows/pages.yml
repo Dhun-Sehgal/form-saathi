@@ -1,4 +1,7 @@
-# Publishes the browser-only preview build (demo data, no server) to GitHub Pages.
+# Publishes the browser-only preview build (real listings, no server) to GitHub Pages.
+# Works in any copy of this repository: if GitHub Pages is not enabled there, the site is still
+# built (to catch errors) but the deploy is skipped instead of failing. Once the repository owner
+# enables Pages (Settings -> Pages -> Source: GitHub Actions), the next push deploys automatically.
 name: Deploy preview to GitHub Pages
 
 on:
@@ -19,19 +22,35 @@ jobs:
   build:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: frontend } }
+    outputs:
+      pages_enabled: ${{ steps.pages.outputs.enabled }}
     steps:
       - uses: actions/checkout@v4
+      - name: Check whether GitHub Pages is enabled
+        id: pages
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" --silent 2>/dev/null; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=GitHub Pages is off::Pages is not enabled for ${{ github.repository }}, so the site was built but not deployed. The repository owner can enable it in Settings -> Pages -> Source: GitHub Actions."
+          fi
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm, cache-dependency-path: frontend/package-lock.json }
       - run: npm ci
       - run: npm run build:preview
         env:
           VITE_BASE: /${{ github.event.repository.name }}/
-      - uses: actions/upload-pages-artifact@v3
+      - if: steps.pages.outputs.enabled == 'true'
+        uses: actions/upload-pages-artifact@v3
         with: { path: frontend/dist-preview }
 
   deploy:
     needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
