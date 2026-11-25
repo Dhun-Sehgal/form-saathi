@@ -310,10 +310,11 @@ async function load() {
   } catch (e) { error.value = e.message } finally { loading.value = false; setTimeout(() => { ready = true }, 0) }
 }
 let timer = null
+const payload = () => ({ title: r.title.trim() || 'Untitled resume', target_role: r.target_role.trim() || null, template: r.template, data: JSON.parse(JSON.stringify(d)) })
 async function save() {
   saveState.value = 'saving'
   try {
-    await api.put(`/resumes/${r.id}`, { title: r.title.trim() || 'Untitled resume', target_role: r.target_role.trim() || null, template: r.template, data: JSON.parse(JSON.stringify(d)) })
+    await api.put(`/resumes/${r.id}`, payload())
     saveState.value = 'saved'
   } catch (e) {
     saveState.value = 'error'
@@ -336,7 +337,20 @@ watch(matchOppId, async (id) => {
 })
 
 const onResize = () => { isDesktop.value = window.matchMedia('(min-width: 992px)').matches }
+// Autosave waits 0.8 s after typing stops. If the page is reloaded or closed in that window,
+// save straight away so nothing typed is lost.
+function flushOnExit() {
+  if (!r.id || saveState.value !== 'saving') return
+  clearTimeout(timer)
+  api.putNow(`/resumes/${r.id}`, payload())
+}
+function onVisibility() {
+  if (document.visibilityState === 'hidden' && saveState.value === 'saving') { clearTimeout(timer); save() }
+}
 onMounted(async () => {
+  window.addEventListener('pagehide', flushOnExit)
+  window.addEventListener('beforeunload', flushOnExit)
+  document.addEventListener('visibilitychange', onVisibility)
   if (!document.getElementById('resume-css')) {
     const st = document.createElement('style'); st.id = 'resume-css'; st.textContent = RESUME_CSS; document.head.appendChild(st)
   }
@@ -349,6 +363,9 @@ onMounted(async () => {
 })
 onBeforeUnmount(() => {
   window.removeEventListener('resize', onResize)
+  window.removeEventListener('pagehide', flushOnExit)
+  window.removeEventListener('beforeunload', flushOnExit)
+  document.removeEventListener('visibilitychange', onVisibility)
   if (saveState.value === 'saving') { clearTimeout(timer); save() }
 })
 

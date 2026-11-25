@@ -51,16 +51,32 @@ async function realRequest(method, url, { params, data, raw } = {}, retried = fa
   }
 }
 
-let previewRequest = null
+let previewModule = null
 async function request(method, url, opts = {}) {
   if (IS_PREVIEW) {
-    if (!previewRequest) previewRequest = (await import('./preview/server.js')).handle
-    return previewRequest(method, url, opts)
+    if (!previewModule) previewModule = await import('./preview/server.js')
+    return previewModule.handle(method, url, opts)
   }
   return realRequest(method, url, opts)
 }
 
 export const api = {
+  /**
+   * Best-effort PUT while the page is closing (reload, tab close, app switch).
+   * Real server: a keepalive fetch that finishes even after the page unloads.
+   * Preview build: a synchronous write to this browser's storage.
+   */
+  putNow(url, data) {
+    if (IS_PREVIEW) { previewModule?.handleSync('put', url, { data }); return }
+    const token = readCookie('csrf_access_token')
+    try {
+      fetch(BASE + url, {
+        method: 'PUT', keepalive: true, credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'X-CSRF-TOKEN': token } : {}) },
+        body: JSON.stringify(data),
+      })
+    } catch { /* best effort: the page is going away */ }
+  },
   get: (url, params) => request('get', url, { params }),
   post: (url, data) => request('post', url, { data }),
   put: (url, data) => request('put', url, { data }),

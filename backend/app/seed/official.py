@@ -11,7 +11,7 @@ import sqlalchemy as sa
 from ..extensions import db
 from ..models import (
     Category, DocumentType, EligibilityCriterion, Opportunity, OpportunityDate, Organization, RequiredDocument,
-    SourceVerificationLog, opportunity_education_levels,
+    SourceVerificationLog, State, opportunity_education_levels,
 )
 from .reference import load_shared, seed_reference
 
@@ -77,6 +77,8 @@ def seed_opportunities(update: bool = False) -> dict:
         ceilings = [c["value"]["amount"] for c in item["criteria"]
                     if c["type"] == "income_max" and c.get("mandatory", True)]
         o.income_ceiling = min(ceilings) if ceilings else None
+        states = {s for c in item["criteria"] if c["type"] == "state_domicile" for s in c["value"]["any_of"]}
+        o.states = db.session.scalars(sa.select(State).where(State.code.in_(states))).all() if states else []
         db.session.add(o)
         db.session.flush()
 

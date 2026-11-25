@@ -691,4 +691,20 @@ export async function handle(method, url, { params = {}, data = {}, raw } = {}) 
   err(404, 'not_found', 'Endpoint not found.')
 }
 
+/** Synchronous variant for saves while the page closes (no artificial delay; sync routes only). */
+export function handleSync(method, url, { params = {}, data = {} } = {}) {
+  if (!load()) return
+  const path = url.split('?')[0]
+  for (const [m, re, fn] of routes) {
+    const match = m === method && path.match(re)
+    if (match) {
+      try {
+        const result = fn({ ...(match.groups || {}), params, data })
+        if (!(result instanceof Promise)) save()
+        return result
+      } catch { return undefined }
+    }
+  }
+}
+
 export function resetPreview() { localStorage.removeItem(KEY); S = null; indexedDB.deleteDatabase('formsaathi-preview') }
