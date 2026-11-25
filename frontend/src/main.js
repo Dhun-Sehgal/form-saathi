@@ -1,10 +1,10 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-// Theme fonts (self-hosted): text, display headings, small labels. Devanagari falls back to Noto Sans.
+// Theme fonts (self-hosted): Plus Jakarta Sans for text, Fraunces for display headings
+// (optical-size axis, so big headlines get the fine display cut). Devanagari falls back to Noto Sans.
 import '@fontsource-variable/plus-jakarta-sans'
-import '@fontsource/instrument-serif/400.css'
-import '@fontsource/instrument-serif/400-italic.css'
-import '@fontsource-variable/jetbrains-mono'
+import '@fontsource-variable/fraunces/opsz.css'
+import '@fontsource-variable/fraunces/opsz-italic.css'
 import '@fontsource/noto-sans-devanagari/400.css'
 import '@fontsource/noto-sans-devanagari/600.css'
 import './styles/main.scss'

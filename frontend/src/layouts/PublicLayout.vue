@@ -1,5 +1,5 @@
 <template>
-  <header class="fs-navbar" :class="{ scrolled }">
+  <header class="fs-navbar" :class="{ scrolled, 'over-hero': overHero }">
     <nav class="container d-flex align-items-center gap-2 py-2" aria-label="Main">
       <router-link to="/" class="me-auto me-lg-4 text-decoration-none"><AppLogo :size="34" /></router-link>
       <div class="d-none d-lg-flex gap-1 me-auto">
@@ -88,7 +88,8 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Github, Mail, Menu, Moon, Sun } from 'lucide-vue-next'
 import AppLogo from '@/components/AppLogo.vue'
@@ -104,6 +105,9 @@ const ui = useUi()
 const menu = ref(false)
 const scrolled = ref(false)
 const onScroll = () => { scrolled.value = window.scrollY > 8 }
+// On the homepage the navbar sits transparently over the photo hero until the page scrolls.
+const route = useRoute()
+const overHero = computed(() => route.path === '/' && !scrolled.value && !menu.value)
 onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
 onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 </script>

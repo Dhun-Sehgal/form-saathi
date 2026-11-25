@@ -74,8 +74,8 @@ export const RESUME_CSS = `
 .rs-classic { font-family: Georgia, 'Times New Roman', Cambria, serif; }
 .rs-classic h1 { font-variant: small-caps; }
 .rs-modern { font-family: Inter, Calibri, Arial, sans-serif; }
-.rs-modern h1 { color: #735a41; letter-spacing: -.01em; }
-.rs-modern h2 { color: #735a41; border-bottom: 1.5px solid #735a41; }
+.rs-modern h1 { color: #5440c4; letter-spacing: -.01em; }
+.rs-modern h2 { color: #5440c4; border-bottom: 1.5px solid #5440c4; }
 `
 
 /** Print the resume through a hidden iframe so only the resume is printed (Save as PDF in the dialog). */

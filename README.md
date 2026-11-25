@@ -159,6 +159,11 @@ docs/         ARCHITECTURE.md, DATABASE.md, DESIGN.md
 - Legal pages are plain-language templates and should be reviewed by a lawyer before a public launch.
 - In-memory rate limiting is per process; use Redis (`RATELIMIT_STORAGE_URI`) when running several instances.
 
+## Credits
+Homepage photo: "Chair and Table in a Room with Shadow of Window on Wall" by Hanna Pad on
+[Pexels](https://www.pexels.com/photo/chair-and-table-in-a-room-with-shadow-of-window-on-wall-8534460/), used under the
+Pexels License. Fonts: Plus Jakarta Sans, Fraunces and Noto Sans Devanagari (SIL Open Font License, via Fontsource).
+
 ## Disclaimer
 
 FormSaathi is an independent guide and is not affiliated with any government body. Always confirm details on the official source before applying.
