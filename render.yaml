@@ -1,0 +1,34 @@
+# Render Blueprint: one web service (Flask API + Vue app) and one PostgreSQL database.
+# Deploy: https://render.com/deploy?repo=https://github.com/anjalikokare/formsaathi
+services:
+  - type: web
+    name: formsaathi
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: formsaathi-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: SEED_DEMO
+        value: "true"
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+
+databases:
+  - name: formsaathi-db
+    plan: free
+    databaseName: formsaathi

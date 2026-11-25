@@ -1,0 +1,47 @@
+{
+  "states": [
+    ["Andhra Pradesh", "state"], ["Arunachal Pradesh", "state"], ["Assam", "state"], ["Bihar", "state"],
+    ["Chhattisgarh", "state"], ["Goa", "state"], ["Gujarat", "state"], ["Haryana", "state"],
+    ["Himachal Pradesh", "state"], ["Jharkhand", "state"], ["Karnataka", "state"], ["Kerala", "state"],
+    ["Madhya Pradesh", "state"], ["Maharashtra", "state"], ["Manipur", "state"], ["Meghalaya", "state"],
+    ["Mizoram", "state"], ["Nagaland", "state"], ["Odisha", "state"], ["Punjab", "state"],
+    ["Rajasthan", "state"], ["Sikkim", "state"], ["Tamil Nadu", "state"], ["Telangana", "state"],
+    ["Tripura", "state"], ["Uttar Pradesh", "state"], ["Uttarakhand", "state"], ["West Bengal", "state"],
+    ["Andaman and Nicobar Islands", "union_territory"], ["Chandigarh", "union_territory"],
+    ["Dadra and Nagar Haveli and Daman and Diu", "union_territory"], ["Delhi", "union_territory"],
+    ["Jammu and Kashmir", "union_territory"], ["Ladakh", "union_territory"],
+    ["Lakshadweep", "union_territory"], ["Puducherry", "union_territory"]
+  ],
+  "categories": [
+    {"slug": "scholarships", "name": "Scholarships", "description": "Financial aid for school, college and higher studies.", "icon": "graduation-cap", "color": "lavender"},
+    {"slug": "internships", "name": "Internships", "description": "Hands-on work experience with stipends or certificates.", "icon": "briefcase", "color": "sky"},
+    {"slug": "fellowships", "name": "Fellowships", "description": "Funded programmes for research, policy and leadership.", "icon": "award", "color": "lilac"},
+    {"slug": "government-schemes", "name": "Government Schemes", "description": "Central and state welfare and support schemes.", "icon": "landmark", "color": "mint"},
+    {"slug": "exams", "name": "Competitive Exams", "description": "Entrance, recruitment and qualifying examinations.", "icon": "file-pen-line", "color": "peach"},
+    {"slug": "jobs", "name": "Jobs", "description": "Full-time, part-time and apprenticeship openings.", "icon": "building-2", "color": "butter"},
+    {"slug": "skill-programs", "name": "Skill Programs", "description": "Training and certification to build job-ready skills.", "icon": "wrench", "color": "sand"},
+    {"slug": "grants", "name": "Grants", "description": "Funding for projects, startups and research.", "icon": "hand-coins", "color": "mint"}
+  ],
+  "document_types": [
+    {"slug": "aadhaar", "name": "Aadhaar card", "description": "Identity proof. Use a masked Aadhaar where the form allows it.", "sensitivity": "high"},
+    {"slug": "income-certificate", "name": "Income certificate", "description": "Family income proof issued by a competent authority.", "sensitivity": "high"},
+    {"slug": "caste-certificate", "name": "Caste / category certificate", "description": "SC / ST / OBC (non-creamy layer) / EWS certificate.", "sensitivity": "high"},
+    {"slug": "domicile-certificate", "name": "Domicile certificate", "description": "Proof of permanent residence in a state.", "sensitivity": "normal"},
+    {"slug": "marksheet", "name": "Marksheet", "description": "Mark sheets or grade cards of qualifying exams.", "sensitivity": "normal"},
+    {"slug": "bank-details", "name": "Bank details", "description": "Passbook front page or cancelled cheque.", "sensitivity": "high"},
+    {"slug": "photograph", "name": "Photograph", "description": "Recent passport-size photograph.", "sensitivity": "normal"},
+    {"slug": "signature", "name": "Signature", "description": "Scanned signature on white paper.", "sensitivity": "normal"},
+    {"slug": "bonafide-certificate", "name": "Bonafide / enrolment certificate", "description": "Issued by your institution.", "sensitivity": "normal"},
+    {"slug": "disability-certificate", "name": "Disability certificate", "description": "UDID or certificate from a competent authority.", "sensitivity": "high"},
+    {"slug": "resume", "name": "Resume / CV", "description": "For internships, fellowships and jobs.", "sensitivity": "normal"},
+    {"slug": "other", "name": "Other document", "description": "Anything else an application asks for.", "sensitivity": "normal"}
+  ],
+  "portals": [
+    {"name": "National Scholarship Portal", "url": "https://scholarships.gov.in", "description": "Central platform for many central and state government scholarships."},
+    {"name": "myScheme", "url": "https://www.myscheme.gov.in", "description": "Government platform to discover central and state schemes."},
+    {"name": "National Career Service", "url": "https://www.ncs.gov.in", "description": "Government portal for jobs, career counselling and skilling."},
+    {"name": "AICTE Internship Portal", "url": "https://internship.aicte-india.org", "description": "Internship listings for technical students."},
+    {"name": "Skill India Digital Hub", "url": "https://www.skillindiadigital.gov.in", "description": "Government platform for skilling courses and certifications."},
+    {"name": "Apprenticeship India", "url": "https://www.apprenticeshipindia.gov.in", "description": "Apprenticeship opportunities under the national scheme."}
+  ]
+}

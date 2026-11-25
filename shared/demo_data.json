@@ -1,0 +1,231 @@
+{
+  "_note": "DEMO DATA. Every organisation, amount, date and rule below is fictional and exists only to demonstrate the product. Dates are offsets in days from the day the data is loaded.",
+  "organizations": [
+    {"key": "det", "name": "Demo Education Trust", "org_type": "ngo", "website": "https://example.org/demo-education-trust"},
+    {"key": "stl", "name": "Sample Tech Labs (Demo)", "org_type": "private", "website": "https://example.org/sample-tech-labs"},
+    {"key": "ssm", "name": "Example State Skills Mission (Demo)", "org_type": "state_government", "website": "https://example.org/state-skills-mission"},
+    {"key": "rfi", "name": "Research Futures Institute (Demo)", "org_type": "university", "website": "https://example.org/research-futures"},
+    {"key": "gwf", "name": "Green Wings Foundation (Demo)", "org_type": "ngo", "website": "https://example.org/green-wings"},
+    {"key": "pcb", "name": "Placeholder Civic Board (Demo)", "org_type": "central_government", "website": "https://example.org/civic-board"}
+  ],
+  "opportunities": [
+    {
+      "slug": "demo-merit-cum-means-scholarship", "title": "Merit-cum-Means Scholarship (Demo)", "category": "scholarships", "org": "det", "scope": "national",
+      "summary": "Annual support for undergraduate students from lower-income families who keep good grades.",
+      "description": "This demo scholarship shows how FormSaathi presents a typical merit-cum-means award: an income limit, a minimum academic score and renewal every year.\n\nSelected students receive a yearly amount towards tuition and study costs. Renewal depends on passing every year.",
+      "eligibility_summary": "Undergraduates, family income up to Rs 2.5 lakh/year, at least 60% in the last exam.",
+      "benefits": "Rs 25,000 per year towards tuition and study expenses, renewable until the course ends.",
+      "benefit_amount_min": 25000, "benefit_amount_max": 25000, "benefit_frequency": "annual",
+      "application_mode": "online",
+      "how_to_apply": "1. Create an account on the (demo) portal.\n2. Fill the application form and upload documents.\n3. Get the form verified by your institution.\n4. Submit before the deadline and save the acknowledgement number.",
+      "opens_in_days": -20, "deadline_in_days": 6, "is_featured": true,
+      "criteria": [
+        {"type": "education_level", "value": {"any_of": ["undergraduate"]}, "description": "Enrolled in an undergraduate course"},
+        {"type": "income_max", "value": {"amount": 250000}, "description": "Annual family income up to Rs 2.5 lakh"},
+        {"type": "marks_min_percentage", "value": {"value": 60}, "description": "At least 60% marks in the previous qualifying exam"},
+        {"type": "custom", "value": {}, "description": "Must not be receiving any other scholarship for the same year"}
+      ],
+      "documents": [
+        {"type": "income-certificate", "notes": "Issued in the current financial year"},
+        {"type": "marksheet", "notes": "Previous year's marksheet"},
+        {"type": "bonafide-certificate"},
+        {"type": "bank-details", "notes": "Account in the student's own name"},
+        {"type": "aadhaar"},
+        {"type": "photograph"}
+      ],
+      "dates": [{"label": "Institute verification closes", "in_days": 13}, {"label": "Results (tentative)", "in_days": 60}]
+    },
+    {
+      "slug": "demo-women-in-stem-scholarship", "title": "Women in STEM Scholarship (Demo)", "category": "scholarships", "org": "gwf", "scope": "national",
+      "summary": "One-time award for women pursuing science, technology, engineering or maths degrees.",
+      "description": "A demo award illustrating gender-specific eligibility. It supports women students in STEM courses with a one-time grant and mentoring sessions.",
+      "eligibility_summary": "Women students in UG/PG STEM courses with CGPA 7.0 or above.",
+      "benefits": "One-time grant of Rs 40,000 plus six mentoring sessions.",
+      "benefit_amount_min": 40000, "benefit_amount_max": 40000, "benefit_frequency": "one_time",
+      "application_mode": "online",
+      "how_to_apply": "Fill the online form, upload documents, and write a 300-word statement on your goals.",
+      "opens_in_days": -10, "deadline_in_days": 21, "is_featured": true,
+      "criteria": [
+        {"type": "gender", "value": {"any_of": ["female"]}, "description": "Open to women students"},
+        {"type": "education_level", "value": {"any_of": ["undergraduate", "postgraduate"]}, "description": "Enrolled in UG or PG"},
+        {"type": "course", "value": {"any_of": ["engineering", "b.tech", "b.e", "b.sc", "m.sc", "m.tech", "mathematics", "science", "computer"]}, "description": "Course in a STEM field"},
+        {"type": "marks_min_cgpa", "value": {"value": 7.0}, "description": "CGPA of 7.0 or above"}
+      ],
+      "documents": [{"type": "marksheet"}, {"type": "bonafide-certificate"}, {"type": "photograph"}, {"type": "resume"}],
+      "dates": [{"label": "Interview round (online)", "in_days": 35}]
+    },
+    {
+      "slug": "demo-summer-software-internship", "title": "Summer Software Internship (Demo)", "category": "internships", "org": "stl", "scope": "national",
+      "summary": "8-week remote internship building real features with a product engineering team.",
+      "description": "Work with mentors on web and data projects. Interns ship at least one feature, attend weekly tech talks, and present a demo at the end.",
+      "eligibility_summary": "Pre-final or final year UG students in computer-related courses.",
+      "benefits": "Monthly stipend of Rs 15,000 and an internship certificate.",
+      "benefit_amount_min": 15000, "benefit_amount_max": 15000, "benefit_frequency": "stipend",
+      "application_mode": "online",
+      "how_to_apply": "Submit your resume and a link to one project. Shortlisted students take a 45-minute online assessment.",
+      "opens_in_days": -5, "deadline_in_days": 18, "is_featured": true,
+      "criteria": [
+        {"type": "education_level", "value": {"any_of": ["undergraduate"]}, "description": "Undergraduate student"},
+        {"type": "year_of_study", "value": {"min": 2, "max": 4}, "description": "In 2nd, 3rd or 4th year"},
+        {"type": "course", "value": {"any_of": ["computer", "information technology", "b.tech", "b.e", "bca", "data"]}, "description": "Computer science or a related course"}
+      ],
+      "documents": [{"type": "resume"}, {"type": "bonafide-certificate"}],
+      "dates": [{"label": "Online assessment", "in_days": 25}, {"label": "Internship starts", "in_days": 50}]
+    },
+    {
+      "slug": "demo-rural-policy-fellowship", "title": "Rural Policy Fellowship (Demo)", "category": "fellowships", "org": "rfi", "scope": "national",
+      "summary": "11-month field fellowship working with district offices on rural development projects.",
+      "description": "Fellows are placed with partner district teams to support programme monitoring and community outreach. Includes training, a monthly fellowship amount and travel support.",
+      "eligibility_summary": "Graduates aged 21–30 with any degree.",
+      "benefits": "Rs 35,000 per month, travel allowance and a completion certificate.",
+      "benefit_amount_min": 35000, "benefit_amount_max": 35000, "benefit_frequency": "monthly",
+      "application_mode": "online",
+      "how_to_apply": "Online application with two short essays, followed by a group discussion and interview.",
+      "opens_in_days": -15, "deadline_in_days": 40,
+      "criteria": [
+        {"type": "age_min", "value": {"years": 21}, "description": "At least 21 years old"},
+        {"type": "age_max", "value": {"years": 30}, "description": "Not older than 30 years"},
+        {"type": "education_level", "value": {"any_of": ["undergraduate", "postgraduate", "doctorate"]}, "description": "Graduate in any discipline (final-year students may apply)"},
+        {"type": "custom", "value": {}, "description": "Willing to live in a rural district for the full fellowship"}
+      ],
+      "documents": [{"type": "marksheet"}, {"type": "aadhaar"}, {"type": "resume"}, {"type": "photograph"}],
+      "dates": [{"label": "Interviews", "in_days": 55}, {"label": "Fellowship begins", "in_days": 90}]
+    },
+    {
+      "slug": "demo-state-skill-certification", "title": "Free Digital Skills Certification (Demo)", "category": "skill-programs", "org": "ssm", "scope": "state",
+      "summary": "Free 3-month course in digital literacy, spreadsheets and basic coding with a certificate.",
+      "description": "A state-run (demo) skilling programme for young residents. Classes run on weekends at partner training centres and online.",
+      "eligibility_summary": "Maharashtra residents aged 18–35 who have passed Class 10.",
+      "benefits": "Free training, study material, certificate, and placement support.",
+      "application_mode": "both",
+      "how_to_apply": "Register online or at the nearest training centre with your documents.",
+      "opens_in_days": -30, "deadline_in_days": 30,
+      "criteria": [
+        {"type": "state_domicile", "value": {"any_of": ["maharashtra"]}, "description": "Resident of Maharashtra"},
+        {"type": "age_min", "value": {"years": 18}, "description": "At least 18 years old"},
+        {"type": "age_max", "value": {"years": 35}, "description": "Not older than 35 years"},
+        {"type": "education_level", "value": {"any_of": ["class_10", "class_12", "diploma", "iti", "undergraduate", "postgraduate", "not_studying"]}, "description": "Passed Class 10 or higher"}
+      ],
+      "documents": [{"type": "domicile-certificate"}, {"type": "aadhaar"}, {"type": "marksheet", "notes": "Class 10 marksheet"}, {"type": "photograph"}],
+      "dates": [{"label": "Batch starts", "in_days": 45}]
+    },
+    {
+      "slug": "demo-sc-st-post-matric-support", "title": "Post-Matric Study Support (Demo)", "category": "government-schemes", "org": "pcb", "scope": "national",
+      "summary": "Fee reimbursement and maintenance allowance for SC/ST students after Class 10.",
+      "description": "Demo scheme illustrating category-based eligibility with an income limit. Covers fees and a monthly allowance for students studying after Class 10.",
+      "eligibility_summary": "SC/ST students studying after Class 10, family income up to Rs 2.5 lakh.",
+      "benefits": "Reimbursement of compulsory fees plus a monthly maintenance allowance.",
+      "application_mode": "online",
+      "how_to_apply": "Apply online, then submit the printed form to your institution for verification.",
+      "opens_in_days": -40, "deadline_in_days": 12,
+      "criteria": [
+        {"type": "social_category", "value": {"any_of": ["sc", "st"]}, "description": "Belongs to SC or ST category"},
+        {"type": "income_max", "value": {"amount": 250000}, "description": "Annual family income up to Rs 2.5 lakh"},
+        {"type": "education_level", "value": {"any_of": ["class_12", "diploma", "iti", "undergraduate", "postgraduate", "doctorate"]}, "description": "Studying in a post-matric (after Class 10) course"}
+      ],
+      "documents": [{"type": "caste-certificate"}, {"type": "income-certificate"}, {"type": "marksheet"}, {"type": "bank-details"}, {"type": "aadhaar"}, {"type": "bonafide-certificate"}],
+      "dates": [{"label": "Institute verification deadline", "in_days": 20}]
+    },
+    {
+      "slug": "demo-engineering-entrance-exam", "title": "National Engineering Aptitude Test (Demo)", "category": "exams", "org": "pcb", "scope": "national",
+      "summary": "Computer-based aptitude test used for admission to partner engineering colleges.",
+      "description": "A demo entrance exam with two sessions a year. Scores are valid for one admission cycle.",
+      "eligibility_summary": "Class 12 students or passed Class 12 with Physics and Maths.",
+      "benefits": "Admission eligibility at participating institutes.",
+      "application_mode": "online",
+      "how_to_apply": "Register online, pay the exam fee, choose an exam city and download your admit card.",
+      "opens_in_days": -3, "deadline_in_days": 26,
+      "criteria": [
+        {"type": "education_level", "value": {"any_of": ["class_12"]}, "description": "Appearing in or passed Class 12"},
+        {"type": "custom", "value": {}, "description": "Physics and Mathematics as compulsory subjects in Class 12"}
+      ],
+      "documents": [{"type": "photograph"}, {"type": "signature"}, {"type": "marksheet", "notes": "Class 10 marksheet for date of birth"}],
+      "dates": [{"label": "Admit card release", "in_days": 40}, {"label": "Exam window", "in_days": 55}]
+    },
+    {
+      "slug": "demo-graduate-trainee-program", "title": "Graduate Trainee Program (Demo)", "category": "jobs", "org": "stl", "scope": "national",
+      "summary": "12-month paid trainee role in operations or analytics, with a full-time offer on completion.",
+      "description": "Trainees rotate across two teams and receive structured training. High performers are offered full-time roles.",
+      "eligibility_summary": "Graduates (any stream) aged up to 26 with 60% or above.",
+      "benefits": "Rs 3.6 lakh per year stipend, health cover, and a possible full-time offer.",
+      "benefit_amount_min": 360000, "benefit_amount_max": 360000, "benefit_frequency": "annual",
+      "application_mode": "online",
+      "how_to_apply": "Apply online with resume; shortlisted candidates take an aptitude test and two interviews.",
+      "opens_in_days": -8, "deadline_in_days": 33,
+      "criteria": [
+        {"type": "education_level", "value": {"any_of": ["undergraduate", "postgraduate"]}, "description": "Graduate or final-year student"},
+        {"type": "age_max", "value": {"years": 26}, "description": "Not older than 26 years"},
+        {"type": "marks_min_percentage", "value": {"value": 60}, "description": "At least 60% in graduation"}
+      ],
+      "documents": [{"type": "resume"}, {"type": "marksheet"}, {"type": "aadhaar"}],
+      "dates": [{"label": "Aptitude test", "in_days": 45}]
+    },
+    {
+      "slug": "demo-student-innovation-grant", "title": "Student Innovation Grant (Demo)", "category": "grants", "org": "rfi", "scope": "national",
+      "summary": "Seed funding for student teams building prototypes that solve local problems.",
+      "description": "Teams of 2–4 students submit an idea; selected teams get funding, lab access and mentors for six months.",
+      "eligibility_summary": "Teams of currently enrolled UG/PG/diploma students.",
+      "benefits": "Up to Rs 1,00,000 per team, lab access and mentoring.",
+      "benefit_amount_min": 25000, "benefit_amount_max": 100000, "benefit_frequency": "one_time",
+      "application_mode": "online",
+      "how_to_apply": "Submit a 2-page proposal and a 2-minute video. Shortlisted teams pitch to a panel.",
+      "opens_in_days": -12, "deadline_in_days": 48, "is_rolling": false,
+      "criteria": [
+        {"type": "education_level", "value": {"any_of": ["diploma", "undergraduate", "postgraduate"]}, "description": "Currently enrolled in diploma, UG or PG"},
+        {"type": "custom", "value": {}, "description": "Team of 2–4 students from the same institution"}
+      ],
+      "documents": [{"type": "bonafide-certificate"}, {"type": "other", "notes": "Project proposal (PDF, max 2 pages)"}],
+      "dates": [{"label": "Pitch day", "in_days": 70}]
+    },
+    {
+      "slug": "demo-apprenticeship-electrician", "title": "Electrician Apprenticeship (Demo)", "category": "jobs", "org": "ssm", "scope": "state",
+      "summary": "1-year paid apprenticeship for ITI electricians at partner industries.",
+      "description": "On-the-job training at partner companies with a monthly stipend and a certificate at the end.",
+      "eligibility_summary": "ITI (Electrician) pass-outs aged 18–25 from Maharashtra or Karnataka.",
+      "benefits": "Monthly stipend of Rs 9,000 and an apprenticeship certificate.",
+      "benefit_amount_min": 9000, "benefit_amount_max": 9000, "benefit_frequency": "stipend",
+      "application_mode": "online",
+      "how_to_apply": "Register on the (demo) apprenticeship portal and apply to listed establishments.",
+      "opens_in_days": -2, "deadline_in_days": null, "is_rolling": true, "deadline_note": "Rolling applications until seats fill",
+      "criteria": [
+        {"type": "education_level", "value": {"any_of": ["iti"]}, "description": "ITI pass-out"},
+        {"type": "course", "value": {"any_of": ["electrician"]}, "description": "Electrician trade"},
+        {"type": "state_domicile", "value": {"any_of": ["maharashtra", "karnataka"]}, "description": "Resident of Maharashtra or Karnataka"},
+        {"type": "age_min", "value": {"years": 18}, "description": "At least 18 years old"},
+        {"type": "age_max", "value": {"years": 25}, "description": "Not older than 25 years"}
+      ],
+      "documents": [{"type": "marksheet", "notes": "ITI marksheet"}, {"type": "aadhaar"}, {"type": "bank-details"}, {"type": "domicile-certificate"}],
+      "dates": []
+    },
+    {
+      "slug": "demo-disability-support-scholarship", "title": "Inclusive Education Scholarship (Demo)", "category": "scholarships", "org": "gwf", "scope": "national",
+      "summary": "Support for students with disabilities, covering fees, devices and readers/writers.",
+      "description": "Demo scholarship showing disability-based eligibility. Covers tuition, assistive devices and exam support costs.",
+      "eligibility_summary": "Students with 40% or more disability, any course after Class 10.",
+      "benefits": "Up to Rs 50,000 per year depending on course and support needs.",
+      "benefit_amount_min": 15000, "benefit_amount_max": 50000, "benefit_frequency": "annual",
+      "application_mode": "online",
+      "how_to_apply": "Apply online with your disability certificate and fee receipts.",
+      "opens_in_days": -25, "deadline_in_days": 15,
+      "criteria": [
+        {"type": "disability", "value": {"required": true}, "description": "Person with benchmark disability (40% or more)"},
+        {"type": "education_level", "value": {"any_of": ["class_12", "diploma", "iti", "undergraduate", "postgraduate", "doctorate"]}, "description": "Studying after Class 10"}
+      ],
+      "documents": [{"type": "disability-certificate"}, {"type": "marksheet"}, {"type": "bank-details"}, {"type": "bonafide-certificate"}],
+      "dates": []
+    },
+    {
+      "slug": "demo-closed-research-internship", "title": "Winter Research Internship (Demo, closed)", "category": "internships", "org": "rfi", "scope": "national",
+      "summary": "A closed demo listing — shows how expired opportunities are handled.",
+      "description": "This record's deadline has passed. FormSaathi marks it expired and never recommends it as active.",
+      "eligibility_summary": "UG/PG science students.",
+      "benefits": "Rs 10,000 stipend per month (demo).",
+      "application_mode": "online",
+      "how_to_apply": "Applications are closed.",
+      "opens_in_days": -60, "deadline_in_days": -5,
+      "criteria": [{"type": "education_level", "value": {"any_of": ["undergraduate", "postgraduate"]}, "description": "UG or PG student"}],
+      "documents": [{"type": "resume"}],
+      "dates": []
+    }
+  ]
+}
