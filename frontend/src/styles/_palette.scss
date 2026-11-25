@@ -1,130 +1,222 @@
 // ============================================================================
-// FormSaathi palette — "Paper & Pastel". Change colours here only.
+// FormSaathi palette — "Warm Neutral". Change colours here only.
 //
-// Emits the same CSS variables as the design's Tailwind @theme (--color-paper, --color-ink,
-// --color-lavender-500, …) for light and dark mode, plus a few colours blended from them at build
-// time (no runtime color-mix(), so older Android browsers render it the same).
+// The five brand colours below are the base of the whole site. A few extra shades are derived from them
+// (a darker charcoal for body text, a deeper brown for links) because the brand colours alone don't
+// reach readable contrast for small text. Muted earth tones are used only where colour carries meaning
+// (eligible / pending / not eligible) or to tell categories apart.
+//
+// Every value the stylesheet uses is a role variable (--fs-bg, --fs-primary, --tint-mint …) emitted by
+// fs-theme() for light and dark mode, so swapping the palette never touches the components.
 // ============================================================================
 @use 'sass:color';
 @use 'sass:map';
 @use 'sass:math';
 
-$fs-light: (
-  paper: #fbf9f6,
-  ink: #211f2e,
-  muted: #6b6879,
-  line: #ebe6df,
-
-  lavender-50: #f4f1ff,
-  lavender-100: #ebe5ff,
-  lavender-300: #c3b5fb,
-  lavender-500: #7c68ee,
-  lavender-700: #5440c4,
-
-  peach-50: #fff4ee,
-  peach-100: #ffe6da,
-  peach-300: #fbbfa3,
-  peach-500: #ec7f58,
-  peach-700: #b9502c,
-
-  mint-50: #eefaf4,
-  mint-100: #d9f3e6,
-  mint-300: #96dcbb,
-  mint-500: #2fa676,
-  mint-700: #1d7a54,
-
-  sky-50: #eef6ff,
-  sky-100: #dcecff,
-  sky-300: #a6cbf6,
-  sky-500: #3f86d8,
-  sky-700: #285fa3,
-
-  butter-50: #fffaea,
-  butter-100: #fff2c7,
-  butter-300: #f6d77a,
-  butter-500: #d9a514,
-  butter-700: #94700a,
+$fs-base: (
+  cream: #f3f0ec,     // Warm Cream — page background
+  'beige': #e1dad1,     // Soft Beige — hairlines, tints, banners
+  taupe: #c9b8aa,     // Taupe — decoration; secondary text in dark mode
+  'brown': #a89480,     // Warm Brown — accents and strips (decoration only: 2.6:1 on cream)
+  charcoal: #6b6258,  // Deep Charcoal — buttons, secondary text, icons
 );
 
-// Dark mode. sky-500 and butter-500 keep their light values (they already read well on dark paper).
-$fs-dark: map.merge($fs-light, (
-  paper: #18151f,
-  ink: #f8f5ef,
-  muted: #b7b1c2,
-  line: #393442,
-
-  lavender-50: #28233a,
-  lavender-100: #352e50,
-  lavender-300: #796ab3,
-  lavender-500: #a391ef,
-  lavender-700: #c2b5ff,
-
-  peach-50: #352720,
-  peach-100: #4a3428,
-  peach-300: #df9b79,
-  peach-500: #ec9b78,
-  peach-700: #ffc2a4,
-
-  mint-50: #1c3229,
-  mint-100: #284838,
-  mint-300: #74bf9d,
-  mint-500: #57bd91,
-  mint-700: #9be1c1,
-
-  sky-50: #1d2a3a,
-  sky-100: #27384d,
-  sky-300: #7ca8d3,
-  sky-700: #aecdf1,
-
-  butter-50: #3a3321,
-  butter-100: #4c4227,
-  butter-300: #dbc27d,
-  butter-700: #efd992,
-));
-
-@function fs($name) { @return map.get($fs-light, $name); }
-@function fs-dark($name) { @return map.get($fs-dark, $name); }
-// Same result as CSS color-mix(in srgb, $a $weight, $b), rounded to whole channels (prints as hex).
+@function base($name) { @return map.get($fs-base, $name); }
+// Same result as CSS color-mix(in srgb, $a $weight, $b), rounded to whole channels.
 @function fs-mix($a, $b, $weight: 50%) {
   $c: color.mix($a, $b, $weight);
   @return rgb(math.round(color.channel($c, 'red', $space: rgb)), math.round(color.channel($c, 'green', $space: rgb)),
     math.round(color.channel($c, 'blue', $space: rgb)));
 }
-
-// Card surfaces: white on light paper; a step lighter than the paper in dark mode.
-@function fs-surface($P, $mode) { @return if($mode == light, #fff, fs-mix(map.get($P, ink), map.get($P, paper), 6%)); }
-@function fs-surface-2($P, $mode) {
-  @return if($mode == light, fs-mix(map.get($P, line), map.get($P, paper), 45%), fs-mix(map.get($P, ink), map.get($P, paper), 10%));
+@function fs-rgb($c) {
+  @return #{math.round(color.channel($c, 'red', $space: rgb))}, #{math.round(color.channel($c, 'green', $space: rgb))},
+    #{math.round(color.channel($c, 'blue', $space: rgb))};
 }
 
-// Every variable that depends on the palette, for one colour mode.
-@mixin fs-theme($P, $mode) {
-  $ink: map.get($P, ink);
-  @each $name, $value in $P { --color-#{$name}: #{$value}; }
+// Earth tones: tint (background) · ink (text on that tint, >= 4.5:1) · accent (dots, strips, illustrations).
+$fs-earth-light: (
+  brand: (tint: fs-mix(base('beige'), base(cream), 70%), ink: #735a41, accent: base('brown')),
+  sand: (tint: #ede5db, ink: #6a5643, accent: base(taupe)),
+  sage: (tint: #e4eadd, ink: #46603c, accent: #7d9570),
+  ochre: (tint: #f4e9d2, ink: #725515, accent: #c49a43),
+  clay: (tint: #f4e1d9, ink: #96412d, accent: #c2735b),
+  slate: (tint: #e2e7ea, ink: #405565, accent: #7a8e9b),
+  mauve: (tint: #eee2e2, ink: #74505a, accent: #a6828b),
+);
+$fs-earth-dark: (
+  brand: (tint: #3a332c, ink: #e3cdb4, accent: base('brown')),
+  sand: (tint: #352f28, ink: #e1d2c2, accent: base(taupe)),
+  sage: (tint: #2a3325, ink: #bcd0af, accent: #93ad84),
+  ochre: (tint: #3a301c, ink: #e8cc8e, accent: #cda65a),
+  clay: (tint: #3d2620, ink: #efb4a3, accent: #d08a73),
+  slate: (tint: #263039, ink: #b9cad6, accent: #8fa3b0),
+  mauve: (tint: #372b2e, ink: #e2c3ca, accent: #b8939c),
+);
 
-  --fs-surface: #{fs-surface($P, $mode)};
-  --fs-surface-2: #{fs-surface-2($P, $mode)};
-  --fs-on-primary: #{if($mode == light, #fff, map.get($P, paper))};
-  // Secondary text on pastel banners (muted alone is 4.4:1 on lavender-100; this is 5.9:1).
-  --fs-muted-strong: #{fs-mix(map.get($P, muted), $ink, 70%)};
-  // Input borders: 3:1 against the card so the field edge stays visible.
-  --fs-border-input: #{fs-mix(map.get($P, muted), map.get($P, line), 70%)};
-  // Start of the primary button gradient (white text stays >= 5.3:1).
-  --fs-btn-start: #{fs-mix(map.get($P, lavender-500), map.get($P, lavender-700), 55%)};
+// Neutral roles per mode. Every pair used for text is >= 4.5:1 (checked; see docs/DESIGN.md).
+$fs-light: (
+  bg: base(cream),
+  surface: #fdfcfa,
+  surface-2: fs-mix(base('beige'), base(cream), 45%),
+  text: fs-mix(base(charcoal), #000, 44%),           // #2f2b27 — body text and headings
+  muted: base(charcoal),
+  muted-strong: fs-mix(base(charcoal), #000, 74%),   // secondary text on beige / taupe banners
+  border: base('beige'),
+  border-input: fs-mix(base(charcoal), base(taupe), 62%),
+  primary: base(charcoal),                           // icons, focus ring, progress fills
+  primary-text: #735a41,                             // links and active nav (deep warm brown)
+  primary-bg: fs-mix(base('beige'), #fdfcfa, 50%),     // active nav, soft buttons
+  primary-bg-strong: base('beige'),
+  on-primary: #fdfcfa,
+  btn-a: fs-mix(base(charcoal), base('brown'), 75%),
+  btn-b: base(charcoal),
+  accent: base('brown'),
+  accent-soft: base(taupe),
+  banner-a: base('beige'),
+  banner-b: fs-mix(base(taupe), base('beige'), 60%),
+  soft-a: base(cream),
+  soft-b: fs-mix(base('beige'), base(cream), 55%),
+  selection: base('beige'),
+  ill-ink: fs-mix(base(charcoal), #000, 44%),
+  ill-ink-2: fs-mix(base(charcoal), #000, 74%),
+  ill-line: base('beige'),
+  ill-shape: base(taupe),
+  ill-shape-soft: base('beige'),
+  ill-muted: base(charcoal),
+);
+$fs-dark: (
+  bg: #1d1a17,
+  surface: #26221f,
+  surface-2: #302b27,
+  text: base(cream),
+  muted: base(taupe),
+  muted-strong: #ddd3c8,
+  border: #3d3732,
+  border-input: #7d7268,
+  primary: base(taupe),
+  primary-text: #e3cdb4,
+  primary-bg: #2f2924,
+  primary-bg-strong: #3a332c,
+  on-primary: #1d1a17,
+  btn-a: #eae3da,
+  btn-b: base('beige'),
+  accent: base('brown'),
+  accent-soft: #6e6155,
+  banner-a: #2f2924,
+  banner-b: #3a322b,
+  soft-a: #1d1a17,
+  soft-b: #27221e,
+  selection: #4a4038,
+  ill-ink: #0f0d0b,
+  ill-ink-2: #2a2622,
+  ill-line: #3d3732,
+  ill-shape: #6e6155,
+  ill-shape-soft: #332d28,
+  ill-muted: base(taupe),
+);
 
-  // Text-safe inks for peach and butter (the 700s alone dip below 4.5:1 on their own tints).
-  --ink-peach: #{fs-mix(map.get($P, peach-700), $ink, 85%)};
-  --ink-butter: #{fs-mix(map.get($P, butter-700), $ink, 75%)};
-  // Two blends so all category colours stay distinct: lilac = lavender x peach, sand = peach x butter.
-  --tint-lilac: #{fs-mix(map.get($P, lavender-100), map.get($P, peach-100))};
-  --ink-lilac: #{fs-mix(map.get($P, lavender-700), map.get($P, peach-700))};
-  --accent-lilac: #{fs-mix(map.get($P, lavender-500), map.get($P, peach-500))};
-  --tint-sand: #{fs-mix(map.get($P, peach-100), map.get($P, butter-100))};
-  --ink-sand: #{fs-mix(fs-mix(map.get($P, peach-700), map.get($P, butter-700)), $ink, 80%)};
-  --accent-sand: #{fs-mix(map.get($P, peach-500), map.get($P, butter-500))};
+@function fsl($name) { @return map.get($fs-light, $name); }
+@function fsd($name) { @return map.get($fs-dark, $name); }
+@function earth($E, $family, $key) { @return map.get(map.get($E, $family), $key); }
 
-  // Illustration inks stay dark in both modes (hair, caps); paper follows the card surface.
-  --ill-ink: #{if($mode == light, map.get($P, ink), #0e0c14)};
-  --ill-ink-2: #{if($mode == light, fs-mix(map.get($P, ink), map.get($P, lavender-700), 75%), #2a2637)};
-  --ill-paper: #{fs-surface($P, $mode)};
+// Every role variable for one colour mode.
+@mixin fs-theme($T, $E, $mode) {
+  @each $name, $value in $fs-base { --color-#{$name}: #{$value}; }
+
+  --fs-bg: #{map.get($T, bg)};
+  --fs-bg-rgb: #{fs-rgb(map.get($T, bg))};
+  --fs-surface: #{map.get($T, surface)};
+  --fs-surface-rgb: #{fs-rgb(map.get($T, surface))};
+  --fs-surface-2: #{map.get($T, surface-2)};
+  --fs-text: #{map.get($T, text)};
+  --fs-muted: #{map.get($T, muted)};
+  --fs-muted-strong: #{map.get($T, muted-strong)};
+  --fs-border: #{map.get($T, border)};
+  --fs-border-input: #{map.get($T, border-input)};
+
+  --fs-primary: #{map.get($T, primary)};
+  --fs-primary-600: #{map.get($T, primary-text)};
+  --fs-primary-400: #{map.get($T, accent-soft)};
+  --fs-primary-50: #{map.get($T, primary-bg)};
+  --fs-lavender: #{map.get($T, primary-bg-strong)};   // soft-surface hover (name kept for existing markup)
+  --fs-on-primary: #{map.get($T, on-primary)};
+  --fs-accent: #{map.get($T, accent)};
+  --fs-accent-soft: #{map.get($T, accent-soft)};
+  --fs-focus: #{map.get($T, primary)};
+  --fs-focus-glow: #{rgba(map.get($T, primary), .18)};
+  --fs-selection-bg: #{map.get($T, selection)};
+
+  --fs-grad: linear-gradient(120deg, #{earth($E, brand, ink)} 0%, #{earth($E, clay, ink)} 100%);   // gradient text
+  --fs-grad-btn: linear-gradient(135deg, #{map.get($T, btn-a)} 0%, #{map.get($T, btn-b)} 100%);
+  --fs-grad-candy: linear-gradient(90deg, #{map.get($T, accent-soft)} 0%, #{map.get($T, accent)} 100%);
+  --fs-grad-pink: linear-gradient(135deg, #{earth($E, clay, ink)} 0%, #{earth($E, clay, ink)} 100%);
+  --fs-grad-soft: linear-gradient(135deg, #{map.get($T, soft-a)} 0%, #{map.get($T, soft-b)} 100%);
+  --fs-grad-banner: linear-gradient(120deg, #{map.get($T, banner-a)} 0%, #{map.get($T, banner-b)} 100%);
+  --fs-pink: #{earth($E, clay, accent)};
+  --fs-coral: #{earth($E, clay, accent)};
+  --fs-coral-ink: #{earth($E, clay, ink)};
+
+  --fs-success: #{earth($E, sage, ink)};   --fs-success-bg: #{earth($E, sage, tint)};
+  --fs-success-line: #{fs-mix(earth($E, sage, accent), earth($E, sage, tint), 35%)};
+  --fs-warning: #{earth($E, ochre, ink)};  --fs-warning-bg: #{earth($E, ochre, tint)};
+  --fs-warning-line: #{fs-mix(earth($E, ochre, accent), earth($E, ochre, tint), 35%)};
+  --fs-danger: #{earth($E, clay, ink)};    --fs-danger-bg: #{earth($E, clay, tint)};
+  --fs-danger-line: #{fs-mix(earth($E, clay, accent), earth($E, clay, tint), 45%)};
+  --fs-info: #{earth($E, slate, ink)};     --fs-info-bg: #{earth($E, slate, tint)};
+  --fs-info-line: #{fs-mix(earth($E, slate, accent), earth($E, slate, tint), 35%)};
+
+  // Category / decoration slots. The slot names are stored with each category in the data, so they stay.
+  $slots: ('lavender': brand, sky: slate, lilac: mauve, mint: sage, peach: clay, butter: ochre, sand: sand);
+  @each $slot, $family in $slots {
+    --tint-#{$slot}: #{earth($E, $family, tint)};
+    --ink-#{$slot}: #{earth($E, $family, ink)};
+    --accent-#{$slot}: #{earth($E, $family, accent)};
+  }
+
+  // Illustrations
+  --ill-violet: #{map.get($T, accent)};
+  --ill-violet-2: #{map.get($T, ill-shape)};
+  --ill-violet-3: #{map.get($T, ill-shape-soft)};
+  --ill-pink: #{earth($E, clay, accent)};     --ill-pink-2: #{earth($E, clay, tint)};
+  --ill-mint: #{earth($E, sage, accent)};     --ill-mint-2: #{earth($E, sage, tint)};
+  --ill-yellow: #{earth($E, ochre, accent)};  --ill-yellow-2: #{earth($E, ochre, tint)};
+  --ill-sky: #{earth($E, slate, accent)};     --ill-sky-2: #{earth($E, slate, tint)};
+  --ill-ink: #{map.get($T, ill-ink)};
+  --ill-ink-2: #{map.get($T, ill-ink-2)};
+  --ill-skin: #d9966e; --ill-skin-2: #b97650;
+  --ill-paper: #{map.get($T, surface)};
+  --ill-line: #{map.get($T, ill-line)};
+  --ill-text: #{map.get($T, text)};
+  --ill-muted: #{map.get($T, ill-muted)};
+
+  // Application status dots (always next to their label). Picked with the dataviz palette validator:
+  // neighbouring statuses stay >= 12 ΔE apart under simulated colour-blindness and >= 16 for normal vision.
+  --status-interested: #{earth($E, slate, ink)};
+  --status-saved: #{base('brown')};
+  --status-preparing_documents: #{earth($E, ochre, ink)};
+  --status-ready_to_apply: #{earth($E, slate, accent)};
+  --status-applied: #{earth($E, brand, ink)};
+  --status-under_review: #{earth($E, mauve, accent)};
+  --status-approved: #{earth($E, sage, ink)};
+  --status-rejected: #{earth($E, clay, accent)};
+
+  // Hero glow and dotted textures
+  --fs-hero-mesh:
+    radial-gradient(600px 380px at 85% 15%, #{rgba(base(taupe), if($mode == light, .38, .10))}, transparent 60%),
+    radial-gradient(520px 360px at 8% 85%, #{rgba(base('brown'), if($mode == light, .20, .08))}, transparent 60%),
+    radial-gradient(420px 300px at 55% 100%, #{rgba(earth($E, sage, accent), if($mode == light, .14, .06))}, transparent 60%),
+    radial-gradient(380px 260px at 0% 10%, #{rgba(earth($E, ochre, accent), if($mode == light, .14, .06))}, transparent 60%);
+  --fs-dots: #{rgba(map.get($T, primary), if($mode == light, .16, .10))};
+
+  @if $mode == light {
+    --fs-shadow-sm: 0 1px 2px rgba(47, 43, 39, .05), 0 2px 8px -4px rgba(47, 43, 39, .08);
+    --fs-shadow-md: 0 14px 34px -18px rgba(107, 98, 88, .38);
+    --fs-shadow-lg: 0 30px 70px -28px rgba(47, 43, 39, .34);
+    --fs-shadow-btn: 0 10px 22px -12px rgba(107, 98, 88, .7);
+  } @else {
+    --fs-shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+    --fs-shadow-md: 0 14px 34px -18px rgba(0, 0, 0, .7);
+    --fs-shadow-lg: 0 30px 70px -28px rgba(0, 0, 0, .8);
+    --fs-shadow-btn: none;
+  }
 }

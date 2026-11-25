@@ -110,7 +110,7 @@
         </div>
         <div class="col-lg-7 order-lg-1">
           <div class="position-relative py-3" aria-label="Example of the FormSaathi app on a phone" role="img">
-            <div class="hero-blob" style="width:min(380px, 80vw);height:min(380px, 80vw);background:var(--color-lavender-100);top:40px;left:50%;transform:translateX(-50%);opacity:.7" />
+            <div class="hero-blob" style="width:min(380px, 80vw);height:min(380px, 80vw);background:var(--tint-lavender);top:40px;left:50%;transform:translateX(-50%);opacity:.7" />
             <div class="phone">
               <div class="phone-notch" />
               <div class="phone-screen p-3 pt-5" aria-hidden="true">

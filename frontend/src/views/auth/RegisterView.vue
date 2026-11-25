@@ -18,7 +18,7 @@
         <input id="pw" v-model="form.password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" autocomplete="new-password" aria-describedby="pwhelp" />
         <div v-if="errors.password" class="invalid-feedback">{{ errors.password }}</div>
         <div id="pwhelp" class="form-text">At least 8 characters, with letters and numbers.</div>
-        <div class="d-flex gap-1 mt-2" aria-hidden="true"><div v-for="i in 3" :key="i" class="flex-fill rounded" style="height:4px" :style="{ background: strength >= i ? ['var(--color-peach-500)', 'var(--color-butter-500)', 'var(--color-mint-500)'][strength - 1] : 'var(--fs-surface-2)' }" /></div>
+        <div class="d-flex gap-1 mt-2" aria-hidden="true"><div v-for="i in 3" :key="i" class="flex-fill rounded" style="height:4px" :style="{ background: strength >= i ? ['var(--accent-peach)', 'var(--accent-butter)', 'var(--accent-mint)'][strength - 1] : 'var(--fs-surface-2)' }" /></div>
       </div>
       <div class="form-check">
         <input id="terms" v-model="form.accept_terms" type="checkbox" class="form-check-input" :class="{ 'is-invalid': errors.accept_terms }" />

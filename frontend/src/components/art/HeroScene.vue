@@ -9,10 +9,10 @@
         <stop offset="1" style="stop-color: var(--ill-pink-2)" />
       </linearGradient>
       <linearGradient id="hs-logo" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#7c68ee" /><stop offset="1" stop-color="#ec7f58" />
+        <stop offset="0" stop-color="#6b6258" /><stop offset="1" stop-color="#a89480" />
       </linearGradient>
       <filter id="hs-shadow" x="-30%" y="-30%" width="160%" height="170%">
-        <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#211f2e" flood-opacity=".14" />
+        <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#2f2b27" flood-opacity=".14" />
       </filter>
     </defs>
 
@@ -54,8 +54,8 @@
     <rect x="208" y="318" width="220" height="118" rx="16" style="fill: var(--ill-paper); stroke: var(--ill-line)" stroke-width="3" />
     <rect x="298" y="357" width="40" height="40" rx="11" fill="url(#hs-logo)" />
     <path d="M311 365 h9 l7 7 v15 a2.5 2.5 0 0 1 -2.5 2.5 h-13.5 a2.5 2.5 0 0 1 -2.5 -2.5 v-19.5 a2.5 2.5 0 0 1 2.5 -2.5 z" fill="#fff" />
-    <rect x="312.5" y="378" width="10" height="2.4" rx="1.2" fill="#7c68ee" />
-    <rect x="312.5" y="383" width="7" height="2.4" rx="1.2" fill="#ec7f58" />
+    <rect x="312.5" y="378" width="10" height="2.4" rx="1.2" fill="#6b6258" />
+    <rect x="312.5" y="383" width="7" height="2.4" rx="1.2" fill="#a89480" />
     <path d="M190 432 H446 L436 446 H200 Z" style="fill: var(--ill-violet)" />
 
     <!-- plant -->

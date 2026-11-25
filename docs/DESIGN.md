@@ -1,48 +1,58 @@
 # FormSaathi — Design Direction
 
 ## Personality
-**Friendly, calm, trustworthy — "Paper & Pastel".** Warm paper background, ink text, five soft pastel hues and cute
-illustrations on a clean, professional structure. Think "a calm senior who has filled these forms before", not "a
+**Calm, warm, trustworthy — "Warm Neutral".** Cream pages, beige and taupe surfaces, warm brown accents and deep
+charcoal text and buttons, with soft illustrations. Think "a calm senior who has filled these forms before", not "a
 government portal" and not "a toy app".
 
 ## Colour palette
-All values live in `frontend/src/styles/_palette.scss`, emitted as CSS variables with the same names as the design's
-Tailwind `@theme` (`--color-paper`, `--color-lavender-500`, …). Every other style reads those variables.
+All values live in `frontend/src/styles/_palette.scss`. Components only use role variables (`--fs-bg`, `--fs-primary`,
+`--tint-mint`, `--status-applied` …), so changing the palette never touches component styles.
 
-| Name | Light | Dark |
-|------|-------|------|
-| paper / ink | `#fbf9f6` / `#211f2e` | `#18151f` / `#f8f5ef` |
-| muted / line | `#6b6879` / `#ebe6df` | `#b7b1c2` / `#393442` |
-| lavender 50·100·300·500·700 | `#f4f1ff` `#ebe5ff` `#c3b5fb` `#7c68ee` `#5440c4` | `#28233a` `#352e50` `#796ab3` `#a391ef` `#c2b5ff` |
-| peach 50·100·300·500·700 | `#fff4ee` `#ffe6da` `#fbbfa3` `#ec7f58` `#b9502c` | `#352720` `#4a3428` `#df9b79` `#ec9b78` `#ffc2a4` |
-| mint 50·100·300·500·700 | `#eefaf4` `#d9f3e6` `#96dcbb` `#2fa676` `#1d7a54` | `#1c3229` `#284838` `#74bf9d` `#57bd91` `#9be1c1` |
-| sky 50·100·300·500·700 | `#eef6ff` `#dcecff` `#a6cbf6` `#3f86d8` `#285fa3` | `#1d2a3a` `#27384d` `#7ca8d3` (500 unchanged) `#aecdf1` |
-| butter 50·100·300·500·700 | `#fffaea` `#fff2c7` `#f6d77a` `#d9a514` `#94700a` | `#3a3321` `#4c4227` `#dbc27d` (500 unchanged) `#efd992` |
+**Brand colours** (the base of every page):
 
-**Roles** (they hold in both modes because the dark palette is inverted): paper = page, ink = text, muted = secondary
-text, line = hairlines; X-50/100 = tinted surfaces; X-300 = decoration; X-500 = accents, icons, focus; X-700 = text on
-paper or on its own tint, and solid buttons (text in `--fs-on-primary`: white in light mode, paper in dark mode).
+| Name | Hex | Used for |
+|------|-----|----------|
+| Warm Cream | `#F3F0EC` | Page background (light); text (dark mode) |
+| Soft Beige | `#E1DAD1` | Hairlines, tints, banners; buttons in dark mode |
+| Taupe | `#C9B8AA` | Decoration, dividers; secondary text in dark mode |
+| Warm Brown | `#A89480` | Accents, card strips, illustrations — decoration only (2.6:1 on cream, too light for text) |
+| Deep Charcoal | `#6B6258` | Buttons, secondary text, icons, focus ring (5.3:1 on cream) |
 
-- **Brand** is lavender: links and active states `lavender-700`, primary buttons a `lavender-500/700 → 700` gradient.
-- **Status**: success mint-700 on mint-50, warning butter-ink on butter-50, danger peach-ink on peach-50, info sky-700 on sky-50 — always with icon + label.
-- **Banners** (dashboard welcome, auth panel, home CTA): `lavender-100 → peach-100` wash with ink text.
-- **Gradient text** (headline highlight, wordmark): `lavender-700 → peach-700`, text-safe at every stop in both modes.
-- **Derived colours** (computed at build time, no runtime `color-mix()`): `--ink-peach` (peach-700 85% + ink) and
-  `--ink-butter` (butter-700 75% + ink), because the plain 700s fall just under 4.5:1 on their own tints; category
-  blends `lilac` = lavender × peach and `sand` = peach × butter so all categories stay distinct; dark card surfaces
-  (paper + 6% / 10% ink); `--fs-muted-strong` for secondary text on banners; `--fs-border-input` (3:1 field edges).
-- **Application status dots** (always next to their label): interested lavender-700, saved sky-500, preparing
-  butter-700, ready mint-500, applied lavender-500, under review butter-500, approved mint-700, rejected peach-500.
-  Chosen by testing every assignment with the dataviz palette validator: adjacent pairs ΔE ≥ 10.5 under simulated
-  colour-blindness and ≥ 17 for normal vision, in light and dark mode. Bars in "Application progress" use one colour
-  (lavender-500); the dots carry status.
+**Derived shades** (needed because the brand colours alone don't reach readable contrast for body text):
+text `#2F2B27` (charcoal darkened, 12.4:1 on cream) · links and active nav `#735A41` (deep warm brown, 5.7:1) ·
+secondary text on banners `#4F4941` · secondary surface `#EBE6E0` · card surface `#FDFCFA` · input edge `#8F8377` (3.6:1).
 
-**Contrast:** every text/background pair above was computed (WCAG 2.x), not judged by eye — all ≥ 4.5:1 in both modes
-(e.g. muted on paper 5.2, lavender-700 on paper 6.9, button text 5.3–7.2, peach ink on its tint 5.0, butter ink on its
-tint 5.7; dark mode 5.6–16.6).
+**Earth tones** — used only where colour carries meaning (status) or to tell categories apart; each has a tint
+(background), an ink (text on that tint, ≥ 4.5:1) and an accent (dots, strips, illustration):
+
+| Tone | Tint / ink / accent | Meaning |
+|------|---------------------|---------|
+| sage | `#E4EADD` / `#46603C` / `#7D9570` | success: eligible, verified, approved |
+| ochre | `#F4E9D2` / `#725515` / `#C49A43` | warning: pending, possibly eligible, reminders |
+| clay (terracotta) | `#F4E1D9` / `#96412D` / `#C2735B` | danger: not eligible, urgent deadlines |
+| slate | `#E2E7EA` / `#405565` / `#7A8E9B` | info |
+| mauve, sand | `#EEE2E2` / `#74505A`, `#EDE5DB` / `#6A5643` | category variety only |
+
+Category colour slots keep their stored names (lavender → brand beige/brown, sky → slate, lilac → mauve, mint → sage,
+peach → clay, butter → ochre, sand → sand).
+
+**Dark mode** is a warm espresso version: page `#1D1A17`, cards `#26221F`, text Warm Cream, secondary text Taupe,
+buttons Soft Beige with dark text, links `#E3CDB4`; earth tones switch to light inks on deep tints.
+
+- **Buttons:** Deep Charcoal (`#7A6F62 → #6B6258`) with near-white text (≥ 4.8:1).
+- **Banners** (dashboard welcome, auth panel, home CTA): Soft Beige → Taupe wash with dark text.
+- **Gradient text** (headline highlight, wordmark): `#735A41 → #96412D`, text-safe at every stop in both modes.
+- **Application status dots** (always next to their label): interested slate-ink, saved Warm Brown, preparing
+  ochre-ink, ready slate, applied deep brown, under review mauve, approved sage-ink, rejected clay. Chosen by testing
+  every assignment with the dataviz palette validator: neighbouring statuses ≥ 12 ΔE apart under simulated
+  colour-blindness and ≥ 16 for normal vision, in light and dark mode. "Application progress" bars use one colour.
+
+**Contrast:** every text/background pair above was computed (WCAG 2.x), not judged by eye — all ≥ 4.5:1 in both
+modes; UI edges (focus ring, input borders, progress fills) ≥ 3:1.
 
 **Status badges** — always text + icon, never colour alone:
-- `Verified` ✓ mint · `Demo` flask lilac · `Pending verification` clock butter · `Expired` muted · `AI guidance` sparkles lavender.
+- `Verified` ✓ sage · `Demo` flask mauve · `Pending verification` clock ochre · `Expired` muted · `AI guidance` sparkles brown.
 
 ## Illustrations
 Custom inline SVG (no stock images, no licensing issues), coloured through `--ill-*` CSS variables so they adapt to dark mode:
@@ -61,7 +71,7 @@ twinkle animations respect `prefers-reduced-motion`.
 
 ## Shape, depth, motion
 - Radius: 13 (inputs), 14 (buttons; pills for hero CTAs), 20 (cards), 28 (banners), 999 (chips).
-- Shadows (ink- and lavender-tinted, soft): `sm 0 1px 2px rgba(33,31,46,.05)`, `md 0 14px 34px -18px rgba(84,64,196,.28)`, `lg 0 30px 70px -28px rgba(33,31,46,.34)`.
+- Shadows (warm, soft): `sm 0 1px 2px rgba(47,43,39,.05)`, `md 0 14px 34px -18px rgba(107,98,88,.38)`, `lg 0 30px 70px -28px rgba(47,43,39,.34)`.
 - Motion: 150 ms (hover), 220 ms (panels), `cubic-bezier(.2,.8,.2,1)`. Cards lift 2px on hover. Respects `prefers-reduced-motion`.
 - No heavy gradients, no glassmorphism beyond a 1-layer translucent navbar on scroll, no neon.
 
@@ -75,10 +85,10 @@ twinkle animations respect `prefers-reduced-motion`.
 - Touch targets ≥ 44 px.
 
 ## Logo concept
-A rounded-square **lavender-500 → peach-500 gradient** mark containing a **white document with a lavender-700 check and a butter spark** — the document = forms, the spark = "the opportunity you found", the rounded shape = friendliness. The mark uses fixed palette hexes so it looks the same in light and dark mode. Wordmark "Form**Saathi**" in Plus Jakarta Sans 700 with "Saathi" in the lavender → peach gradient. Delivered as SVG + favicon.
+A rounded-square **Deep Charcoal → Warm Brown gradient** mark containing a **white document with a charcoal check and a cream spark** — the document = forms, the spark = "the opportunity you found", the rounded shape = friendliness. The mark uses fixed palette hexes so it looks the same in light and dark mode. Wordmark "Form**Saathi**" in Plus Jakarta Sans 700 with "Saathi" in the warm brown → terracotta gradient. Delivered as SVG + favicon.
 
 ## Components (built in Phase 2)
 Button (primary/secondary/ghost/danger, sizes, loading), IconButton, Badge/StatusBadge, Chip, Card, OpportunityCard, StatCard, ProgressRing, Stepper, Input/Select/Textarea with help + error text, SearchBar, FilterPanel / BottomSheet, Modal, Tabs, Accordion (FAQ), Toast, Tooltip, Skeleton, EmptyState (with illustration), ErrorState, Avatar, Timeline, KanbanColumn, Sidebar, TopBar, MobileTabBar, LanguageSwitcher, ThemeToggle.
 
 ## Accessibility
-WCAG 2.2 AA: contrast checked on every token pair, visible focus ring (3px `lavender-500` outline, 3.9:1 on paper), semantic landmarks, labelled form controls, `aria-live` for toasts and chat, full keyboard navigation for board/tabs/modals, `lang` attribute switched with language.
+WCAG 2.2 AA: contrast checked on every token pair, visible focus ring (3px Deep Charcoal outline, 5.3:1 on cream; Taupe in dark mode), semantic landmarks, labelled form controls, `aria-live` for toasts and chat, full keyboard navigation for board/tabs/modals, `lang` attribute switched with language.

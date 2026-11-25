@@ -16,7 +16,7 @@
       <rect x="40" y="28" width="40" height="5" rx="2.5" fill="var(--fs-surface)" />
       <rect x="40" y="40" width="30" height="5" rx="2.5" fill="var(--fs-surface)" />
       <rect x="40" y="52" width="35" height="5" rx="2.5" fill="var(--fs-surface)" />
-      <circle cx="86" cy="18" r="9" style="fill: var(--color-peach-500)" />
+      <circle cx="86" cy="18" r="9" style="fill: var(--accent-peach)" />
       <text x="86" y="22" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ill-paper)">{{ kind === 'error' ? '!' : '?' }}</text>
     </svg>
     <h3 class="h5 fw-bold">{{ title || (kind === 'error' ? 'Something went wrong' : 'Nothing here yet') }}</h3>

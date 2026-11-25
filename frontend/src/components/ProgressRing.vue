@@ -1,6 +1,6 @@
 <template>
   <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`" role="img" :aria-label="`${value}% complete`">
-    <defs><linearGradient :id="gid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color: var(--color-lavender-500)" /><stop offset="1" style="stop-color: var(--color-peach-500)" /></linearGradient></defs>
+    <defs><linearGradient :id="gid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color: var(--fs-primary)" /><stop offset="1" style="stop-color: var(--fs-accent)" /></linearGradient></defs>
     <circle :cx="c" :cy="c" :r="r" fill="none" stroke="var(--fs-surface-2)" :stroke-width="stroke" />
     <circle :cx="c" :cy="c" :r="r" fill="none" :stroke="color || `url(#${gid})`" :stroke-width="stroke" stroke-linecap="round"
             :stroke-dasharray="len" :stroke-dashoffset="len * (1 - value / 100)" :transform="`rotate(-90 ${c} ${c})`"
