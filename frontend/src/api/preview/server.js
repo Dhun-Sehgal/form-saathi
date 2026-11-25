@@ -3,9 +3,10 @@
 import { ApiError } from '../index.js'
 import { evaluate, templateExplanation } from './eligibility.js'
 import reference from '@shared/reference.json'
-import demo from '@shared/demo_data.json'
+import official from '@shared/opportunities.json'
 
-const KEY = 'formsaathi_preview_v1'
+// v2: real, source-checked opportunities (v1 held sample data — bumping the key discards it).
+const KEY = 'formsaathi_preview_v2'
 const PRE_APPLY = ['interested', 'saved', 'preparing_documents', 'ready_to_apply']
 const STATUSES = ['interested', 'saved', 'preparing_documents', 'ready_to_apply', 'applied', 'under_review', 'approved', 'rejected']
 export const PREVIEW_ADMIN = { email: 'admin@formsaathi.demo', password: 'admin1234' }
@@ -28,7 +29,7 @@ let S = null
 function load() {
   if (S) return S
   try { S = JSON.parse(localStorage.getItem(KEY)) } catch { S = null }
-  if (!S || S.version !== 1) S = null
+  if (!S || S.version !== 2) S = null
   return S
 }
 function save() { localStorage.setItem(KEY, JSON.stringify(S)) }
@@ -37,7 +38,7 @@ const stateCode = (name) => name.toLowerCase().replace(/ and /g, '-').replace(/ 
 
 async function init() {
   if (load()) return S
-  S = { version: 1, seq: {}, session: null, users: [], profiles: {}, prefs: {}, saved: [], collections: [], applications: [],
+  S = { version: 2, seq: {}, session: null, users: [], profiles: {}, prefs: {}, saved: [], collections: [], applications: [],
     history: [], notes: [], reminders: [], notifications: [], documents: [], chats: [], messages: [], corrections: [],
     announcements: [], feedback: [], logs: [], orgs: [], opportunities: [] }
   S.states = reference.states.map(([name, kind]) => ({ code: stateCode(name), name, kind })).sort((a, b) => a.name.localeCompare(b.name))
@@ -45,34 +46,36 @@ async function init() {
   S.docTypes = reference.document_types.map((d, i) => ({ id: i + 1, ...d }))
   S.seq.categories = S.categories.length
   const orgKey = {}
-  for (const o of demo.organizations) { const id = nextId('orgs'); S.orgs.push({ id, name: o.name, org_type: o.org_type, website: o.website }); orgKey[o.key] = id }
-  demo.opportunities.forEach((item, idx) => {
+  for (const o of official.organizations) { const id = nextId('orgs'); S.orgs.push({ id, name: o.name, org_type: o.org_type, website: o.website }); orgKey[o.key] = id }
+  const verifiedAt = `${official.verified_on}T12:00:00.000Z`
+  official.opportunities.forEach((item, idx) => {
     const id = nextId('opportunities')
-    const deadline = item.deadline_in_days != null ? addDays(item.deadline_in_days) : null
-    const crit = item.criteria.map((c, i) => ({ id: nextId('criteria'), criterion_type: c.type, value: c.value, description: c.description, source_excerpt: c.excerpt || null, is_mandatory: c.mandatory !== false, sort_order: i }))
-    const created = new Date(Date.now() - (demo.opportunities.length - idx) * 3600e3).toISOString()
+    const deadline = item.deadline || null
+    const crit = item.criteria.map((c, i) => ({ id: nextId('criteria'), criterion_type: c.type, value: c.value || {}, description: c.description, source_excerpt: c.excerpt || null, is_mandatory: c.mandatory !== false, sort_order: i }))
+    const ceilings = crit.filter((c) => c.criterion_type === 'income_max' && c.is_mandatory).map((c) => c.value.amount)
+    const created = new Date(Date.parse(verifiedAt) - (official.opportunities.length - idx) * 60e3).toISOString()
+    const status = deadline && deadline < today() ? 'expired' : 'verified'
     S.opportunities.push({
       id, slug: item.slug, title: item.title, summary: item.summary, description: item.description,
-      category_id: S.categories.find((c) => c.slug === item.category).id, organization_id: orgKey[item.org], scope: item.scope,
+      category_id: S.categories.find((c) => c.slug === item.category).id, organization_id: orgKey[item.org], scope: item.scope || 'national',
       eligibility_summary: item.eligibility_summary, benefits: item.benefits, benefit_amount_min: item.benefit_amount_min ?? null,
       benefit_amount_max: item.benefit_amount_max ?? null, benefit_frequency: item.benefit_frequency || null,
-      income_ceiling: Math.min(...crit.filter((c) => c.criterion_type === 'income_max').map((c) => c.value.amount)) || null,
-      application_mode: item.application_mode, how_to_apply: item.how_to_apply,
-      official_url: `https://example.org/formsaathi-demo/${item.slug}`, apply_url: `https://example.org/formsaathi-demo/${item.slug}/apply`,
-      source_url: `https://example.org/formsaathi-demo/${item.slug}/notification`,
-      opens_on: item.opens_in_days != null ? addDays(item.opens_in_days) : null, deadline, is_rolling: !!item.is_rolling, deadline_note: item.deadline_note || null,
-      verification_status: deadline && deadline < today() ? 'expired' : 'pending_verification', publication_status: 'published', data_origin: 'demo',
-      last_verified_at: null, is_featured: !!item.is_featured, featured_rank: item.is_featured ? idx + 1 : null, created_at: created, updated_at: created,
+      income_ceiling: ceilings.length ? Math.min(...ceilings) : null,
+      application_mode: item.application_mode || 'online', how_to_apply: item.how_to_apply || null,
+      official_url: item.official_url || null, apply_url: item.apply_url || null, source_url: item.source_url,
+      opens_on: item.opens_on || null, deadline, is_rolling: !!item.rolling, deadline_note: item.deadline_note || null,
+      verification_status: status, publication_status: 'published', data_origin: 'official',
+      last_verified_at: verifiedAt, is_featured: !!item.featured, featured_rank: item.featured || null, created_at: created, updated_at: created,
       states: [...new Set(crit.filter((c) => c.criterion_type === 'state_domicile').flatMap((c) => c.value.any_of))],
       education_levels: [...new Set(crit.filter((c) => c.criterion_type === 'education_level').flatMap((c) => c.value.any_of))],
       criteria: crit,
       required_documents: item.documents.map((d) => ({ document_type_id: S.docTypes.find((t) => t.slug === d.type).id, is_mandatory: d.mandatory !== false, notes: d.notes || null })),
-      dates: item.dates.map((d) => ({ label: d.label, date: addDays(d.in_days), note: null })),
+      dates: item.dates.map((d) => ({ label: d.label, date: d.date, note: d.note || null })),
     })
+    S.logs.push({ id: nextId('logs'), opportunity_id: id, action: 'verified', from_status: null, to_status: status, notes: `Checked against the official source on ${official.verified_on} while setting up FormSaathi.`, actor: 'system', created_at: verifiedAt })
   })
-  for (const o of S.opportunities) if (!isFinite(o.income_ceiling)) o.income_ceiling = null
   await createUser(PREVIEW_ADMIN.email, PREVIEW_ADMIN.password, 'Demo Admin', 'admin', true)
-  S.announcements.push({ id: nextId('announcements'), title: 'Welcome to the FormSaathi preview', body: 'Everything you do here is stored only in this browser. All opportunities are demo data.', audience: 'all', level: 'info', starts_at: null, ends_at: null, is_active: true, created_at: now() })
+  S.announcements.push({ id: nextId('announcements'), title: 'Welcome to the FormSaathi preview', body: 'Your account and everything you do here is stored only in this browser. Opportunities are real and were checked against official sources — always confirm dates on the official site before applying.', audience: 'all', level: 'info', starts_at: null, ends_at: null, is_active: true, created_at: now() })
   save()
   return S
 }

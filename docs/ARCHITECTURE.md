@@ -278,7 +278,7 @@ banner says so on every page. The normal build talks to Flask.
 
 ## 11. Data accuracy policy (enforced)
 - **Real opportunities** enter the system only through the admin editor with an official `source_url`; they stay `pending_verification` until a reviewer verifies them.
-- **Demo data** uses clearly fictional organisations (e.g. "Demo Education Trust") and `example.org` links, has `data_origin = 'demo'`, and every card shows a **Demo** badge. Demo records can be wiped with one command.
+- **Live data** is `shared/opportunities.json`: real opportunities checked against official sources (last on 25 Nov 2026), loaded with `flask seed-opportunities`. Sample data survives only as a test fixture and is never shown to users; `flask purge-demo` removes sample rows from older installs.
 - The seed may include a directory of **official portals** (e.g. National Scholarship Portal, myScheme, National Career Service) as links only — no invented deadlines, amounts or eligibility.
 - Opportunities whose deadline has passed are auto-marked `expired` and excluded from recommendations.
 - We do not scrape; data comes from manual admin entry or officially permitted feeds.

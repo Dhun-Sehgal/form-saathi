@@ -1,5 +1,8 @@
-"""Demo opportunities (shared/demo_data.json). Always data_origin='demo', never verified."""
+"""Demo opportunities for automated tests only (backend/tests/fixtures/demo_data.json).
+Always data_origin='demo', never verified. Real users see shared/opportunities.json instead."""
+import json
 from datetime import date, timedelta
+from pathlib import Path
 
 import sqlalchemy as sa
 
@@ -8,12 +11,14 @@ from ..models import (
     Category, DocumentType, EligibilityCriterion, Opportunity, OpportunityDate, Organization, RequiredDocument,
     State, opportunity_education_levels,
 )
-from .reference import load_shared, seed_reference
+from .reference import seed_reference
+
+FIXTURE = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "demo_data.json"
 
 
-def seed_demo(reset: bool = False) -> int:
+def seed_demo(reset: bool = False, path: Path = FIXTURE) -> int:
     seed_reference()
-    data = load_shared("demo_data.json")
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
     if reset:
         purge_demo()
 

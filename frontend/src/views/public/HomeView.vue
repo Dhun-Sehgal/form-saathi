@@ -116,10 +116,10 @@
               <div class="phone-screen p-3 pt-5" aria-hidden="true">
                 <div class="d-flex align-items-center justify-content-between mb-3"><AppLogo :size="24" /><span class="fs-badge fs-badge-coral"><Bell /> 2</span></div>
                 <div class="small text-muted mb-1">Eligibility check</div>
-                <div class="fw-bold mb-2" style="font-size:.95rem">Merit-cum-Means Scholarship</div>
-                <div class="verdict verdict-eligible p-2 mb-2 align-items-center" style="border-radius:1rem">
-                  <span class="crit-icon" style="background: var(--fs-surface)"><CircleCheck /></span>
-                  <div class="small fw-bold">You appear to be eligible</div>
+                <div class="fw-bold mb-2" style="font-size:.95rem">PM-USP Central Sector Scholarship</div>
+                <div class="verdict verdict-possibly_eligible p-2 mb-2 align-items-center" style="border-radius:1rem">
+                  <span class="crit-icon" style="background: var(--fs-surface)"><HelpCircle /></span>
+                  <div class="small fw-bold">Possibly eligible — 2 rules to confirm</div>
                 </div>
                 <div class="fs-card p-2 mb-2" style="border-radius:1rem">
                   <div v-for="r in phoneRules" :key="r.t" class="d-flex align-items-center gap-2 py-1 small">
@@ -128,7 +128,7 @@
                   </div>
                 </div>
                 <div class="fs-card p-2 mb-2" style="border-radius:1rem">
-                  <div class="d-flex justify-content-between small fw-bold mb-1"><span style="font-size:.78rem">Documents ready</span><span style="font-size:.78rem">4 / 6</span></div>
+                  <div class="d-flex justify-content-between small fw-bold mb-1"><span style="font-size:.78rem">Documents ready</span><span style="font-size:.78rem">2 / 3</span></div>
                   <div class="progress"><div class="progress-bar" style="width: 66%" /></div>
                 </div>
                 <div class="bubble bubble-user small ms-auto mb-2" style="max-width: 85%; font-size:.76rem">डोमिसाइल सर्टिफिकेट क्या होता है?</div>
@@ -159,7 +159,7 @@
         <div><span class="section-eyebrow"><Flame :size="14" /> Featured</span><h2 class="section-title mt-2 mb-0">Open right now</h2></div>
         <router-link to="/explore" class="btn btn-soft btn-pill">{{ t('common.viewAll') }} <ArrowRight :size="16" /></router-link>
       </div>
-      <div class="demo-ribbon d-flex gap-2 align-items-start mb-4"><FlaskConical :size="18" class="flex-shrink-0 mt-1" /><span>These listings are <strong>demo data</strong> used to show how FormSaathi works. Real opportunities appear with a <strong>Verified</strong> badge only after our team checks them against the official source.</span></div>
+      <div class="d-flex gap-2 align-items-start mb-4 p-3 rounded-4" style="background: var(--fs-success-bg); color: var(--fs-text)"><BadgeCheck :size="18" class="flex-shrink-0 mt-1" style="color: var(--fs-success)" /><span class="small">Every listing comes from an <strong>official source</strong> — ministries, AICTE, UGC, RBI, UPSC and others — and shows when it was last verified. Authorities can extend or change dates, so always confirm on the official site before applying.</span></div>
       <StateBlock v-if="loading" kind="loading" />
       <StateBlock v-else-if="error" kind="error" message="We couldn't load featured opportunities." @retry="load" />
       <div v-else class="row g-3">
@@ -258,7 +258,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
-  ArrowRight, BadgeCheck, Bell, Bot, CalendarClock, Check, CircleCheck, FileCheck2, Flame, FlaskConical, Heart, HelpCircle,
+  ArrowRight, BadgeCheck, Bell, Bot, CalendarClock, Check, CircleCheck, FileCheck2, Flame, Heart, HelpCircle,
   KanbanSquare, Languages, ListChecks, MessageCircleQuestion, Route, Scale, Search, Shapes, ShieldCheck, Smartphone, Sparkles,
   UserRoundCheck, Users,
 } from 'lucide-vue-next'
@@ -301,10 +301,10 @@ const steps = [
   { art: 'track', title: 'Apply & track', text: 'Apply on the official site, then track status, notes and reminders.' },
 ]
 const phoneRules = [
-  { t: 'Undergraduate student', o: 'met' },
-  { t: 'Family income up to ₹2.5 lakh', o: 'met' },
-  { t: 'Marks 60% or above', o: 'met' },
-  { t: 'No other scholarship this year', o: 'needs_review' },
+  { t: 'Regular degree course', o: 'met' },
+  { t: 'Family income up to ₹4.5 lakh', o: 'met' },
+  { t: 'Above 80th percentile in Class XII', o: 'needs_review' },
+  { t: 'No other scholarship or fee waiver', o: 'needs_review' },
 ]
 const showcase = [
   { icon: Scale, title: 'Rule-by-rule eligibility', text: 'Met, not met or needs info — never a made-up percentage.', tint: 'tint-lavender' },

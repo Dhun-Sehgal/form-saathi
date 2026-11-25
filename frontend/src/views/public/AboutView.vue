@@ -19,7 +19,7 @@
       <ul class="text-muted">
         <li>Real opportunities are added only from official sources and show their source link and last-verified date.</li>
         <li>Listings stay labelled <em>Pending verification</em> until a reviewer checks them.</li>
-        <li>Sample listings are labelled <strong>Demo</strong>; the system itself refuses to mark demo data as verified.</li>
+        <li>We never publish made-up listings — the system itself refuses to mark sample data as verified.</li>
         <li>Expired opportunities are marked automatically and are never recommended as open.</li>
         <li>We don’t scrape websites against their terms.</li>
       </ul>

@@ -29,7 +29,7 @@ const groups = [
   ] },
   { title: 'Verification & data', items: [
     { q: 'What does the Verified badge mean?', a: 'A FormSaathi reviewer checked the listing against its official source on the date shown.' },
-    { q: 'What is Demo data?', a: 'Sample listings that show how FormSaathi works. They are not real opportunities and their links point to example.org.' },
+    { q: 'How up to date is the information?', a: 'Each listing shows the date it was last checked against its official source. Authorities sometimes extend or change deadlines and rules, so always confirm on the official website before applying.' },
     { q: 'I found a mistake.', a: 'Use “Report a correction” on the opportunity page. Our team reviews every report.' },
   ] },
   { title: 'Documents & privacy', items: [

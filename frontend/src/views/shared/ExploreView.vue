@@ -97,7 +97,7 @@ const error = ref('')
 const sheet = ref(false)
 const compareIds = ref([])
 const statusTabs = [{ value: 'open', label: 'Open' }, { value: 'closing_soon', label: 'Closing soon' }, { value: 'all', label: 'All' }, { value: 'closed', label: 'Closed' }]
-const activeCount = computed(() => ['category', 'education', 'state', 'income', 'deadline_within', 'mine', 'origin'].filter((k) => filters[k]).length)
+const activeCount = computed(() => ['category', 'education', 'state', 'income', 'deadline_within', 'mine'].filter((k) => filters[k]).length)
 const profileHint = computed(() => auth.profile.education_level || auth.profile.state_code)
 
 function query() { return Object.fromEntries(KEYS.filter((k) => filters[k] && !(k === 'sort' && filters[k] === 'relevance')).map((k) => [k, filters[k]])) }
@@ -134,7 +134,6 @@ const FilterFields = {
       sel('f-inc', 'Family income', 'income', Object.entries(LABELS.income).filter(([k]) => k !== 'prefer_not_say')),
       sel('f-dl', 'Deadline', 'deadline_within', [['7', 'Within 7 days'], ['30', 'Within 30 days'], ['90', 'Within 90 days']]),
       props.inApp ? sel('f-mine', 'My status', 'mine', [['saved', 'Saved'], ['tracked', 'In my tracker'], ['not_tracked', 'Not tracked yet']]) : null,
-      sel('f-origin', 'Data', 'origin', [['official', 'Official only'], ['demo', 'Demo only']]),
     ])
   },
 }

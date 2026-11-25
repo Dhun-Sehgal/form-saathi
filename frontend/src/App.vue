@@ -1,7 +1,7 @@
 <template>
   <a href="#main" class="skip-link">Skip to content</a>
   <div v-if="IS_PREVIEW && !bannerHidden" class="preview-banner" role="note">
-    ✨ <strong>Preview mode:</strong> everything runs in your browser with demo data — nothing is sent to a server.
+    ✨ <strong>Preview mode:</strong> your account and activity stay in this browser — nothing is sent to a server. Listings are real, from official sources.
     <a href="https://github.com/anjalikokare/formsaathi#deploy-the-full-app" target="_blank" rel="noopener">Deploy the full app</a>
     <button class="btn-close position-absolute top-50 end-0 translate-middle-y me-3" style="font-size:.65rem" aria-label="Hide preview notice" @click="hideBanner" />
   </div>

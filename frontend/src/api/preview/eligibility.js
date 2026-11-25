@@ -95,6 +95,9 @@ export function evaluate(profile, criteria) {
 
 export function templateExplanation(report, title) {
   const c = report.counts
+  if (!report.results.some((r) => r.is_mandatory)) {
+    return { summary: `${title} has no special eligibility rules to check — it is open to everyone it is meant for.`, next_steps: ['Read how to apply on the official website.', 'Keep the documents it asks for ready.'] }
+  }
   if (report.verdict === 'eligible') {
     return { summary: `Based on your profile, you meet all ${c.met} checkable rules for ${title}.`, next_steps: ['Gather the required documents.', 'Read the official notification once before applying.', 'Apply on the official portal before the deadline.'] }
   }

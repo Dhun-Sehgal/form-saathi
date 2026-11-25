@@ -65,5 +65,5 @@ def api(client):
 def seeded(app):
     from app.seed.demo import seed_demo
 
-    seed_demo()
+    seed_demo()  # test fixture: backend/tests/fixtures/demo_data.json
     return app

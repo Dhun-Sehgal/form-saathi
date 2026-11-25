@@ -20,7 +20,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 
 | | What it is | Data |
 |---|---|---|
-| **Live preview** — [Vercel](https://formsaathi-app.vercel.app) · [GitHub Pages](https://anjalikokare.github.io/formsaathi/) | The complete Vue app running **entirely in your browser** — a built-in mock of the API stores everything in `localStorage`/IndexedDB. Every page works: sign up, onboarding, discovery, eligibility, tracker, documents, calendar, admin panel. | Demo data only. Nothing leaves your browser. Saathi AI chat is off (no server). Admin login: `admin@formsaathi.demo` / `admin1234`. |
+| **Live preview** — [Vercel](https://formsaathi-app.vercel.app) · [GitHub Pages](https://anjalikokare.github.io/formsaathi/) | The complete Vue app running **entirely in your browser** — a built-in mock of the API stores everything in `localStorage`/IndexedDB. Every page works: sign up, onboarding, discovery, eligibility, tracker, documents, calendar, admin panel. | Real opportunities from official sources (see below). Your account and activity stay in your browser. Saathi AI chat is off (no server). Admin login: `admin@formsaathi.demo` / `admin1234`. |
 | **Full app (Flask + PostgreSQL)** | The real product: Flask REST API, PostgreSQL, secure cookie auth, private file storage, Saathi AI (with an API key), email (with SMTP). | Your database. Deploy with one click — see below. |
 
 ## Features
@@ -68,7 +68,7 @@ cp .env.example .env                 # edit values; SQLite works out of the box
 export FLASK_APP=wsgi.py             # PowerShell: $env:FLASK_APP="wsgi.py"
 flask db upgrade                     # create tables
 flask seed-reference                 # states, categories, document types
-flask seed-demo                      # clearly-labelled DEMO opportunities
+flask seed-opportunities             # real opportunities from shared/opportunities.json
 flask create-admin                   # prompts for an admin email + password
 flask run                            # API on http://127.0.0.1:5000
 
@@ -88,7 +88,7 @@ npm run build:preview                # browser-only preview build (GitHub Pages,
 npm run build:vercel                 # browser-only preview build (Vercel, clean URLs; see vercel.json)
 flask run-jobs                       # expire past deadlines + generate notifications
 python -m app.worker                 # run those jobs every 30 minutes
-flask purge-demo                     # remove all demo opportunities before a real launch
+flask purge-demo                     # remove sample rows left by older versions
 ```
 
 ## Configuration
@@ -128,11 +128,17 @@ Build Command `npm run build:vercel`, Output Directory `dist-vercel`, Node 22. C
 
 ## Data accuracy policy
 
-- Real opportunities enter only through the admin editor with an **official source URL**, stay *Pending verification* until a reviewer verifies them, and must be verified before they can be published.
-- All sample listings are **Demo** data: fictional organisations, `example.org` links, never verifiable (a database CHECK constraint enforces this).
-- Opportunities past their deadline are automatically marked expired and never recommended.
-- No scraping. The footer and About page link to official portals (National Scholarship Portal, myScheme, National Career Service, …) as links only.
-- AI output is always labelled and never presented as official advice.
+- **Real listings only.** `shared/opportunities.json` holds 18 real opportunities (scholarships, internships, a fellowship,
+  UPSC CSE 2027, jobs and apprenticeships, skilling, government schemes and a startup grant). Each was checked against its
+  official source on **25 Nov 2026** — the NSP portal and scheme guidelines, AICTE, UGC, RBI, NITI Aayog, PRS, UPSC, PIB and
+  ministry portals — and every rule quote shown to users is copied from that source.
+- Deadlines and rules change every year. Opportunities past their deadline are marked expired automatically and are never
+  recommended. Admins add, edit and re-verify listings in the admin panel (or update the JSON and run
+  `flask seed-opportunities --update`).
+- New listings added by admins stay *Pending verification* and cannot be published until they are verified against the
+  official source. The database refuses to mark sample data as verified.
+- Sample data exists only as an automated-test fixture (`backend/tests/fixtures/demo_data.json`) and is never shown to users.
+- No scraping. AI output is always labelled and never presented as official advice.
 
 ## Project structure
 

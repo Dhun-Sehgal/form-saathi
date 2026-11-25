@@ -13,17 +13,17 @@ def register_cli(app: Flask) -> None:
 
         click.echo(f"Reference data ready. Newly created: {seed_reference()}")
 
-    @app.cli.command("seed-demo")
-    @click.option("--reset", is_flag=True, help="Delete existing demo opportunities first.")
-    def seed_demo_cmd(reset):
-        """Load clearly-labelled DEMO opportunities (safe to re-run)."""
-        from .demo import seed_demo
+    @app.cli.command("seed-opportunities")
+    @click.option("--update", is_flag=True, help="Overwrite existing records with the data in shared/opportunities.json.")
+    def seed_opportunities_cmd(update):
+        """Load the real, source-checked opportunities from shared/opportunities.json (safe to re-run)."""
+        from .official import seed_opportunities
 
-        click.echo(f"Demo opportunities created: {seed_demo(reset)}")
+        click.echo(f"Official opportunities: {seed_opportunities(update)}")
 
     @app.cli.command("purge-demo")
     def purge_demo_cmd():
-        """Remove every demo opportunity."""
+        """Remove every demo opportunity (older installs loaded sample data)."""
         from .demo import purge_demo
 
         click.echo(f"Demo opportunities removed: {purge_demo()}")

@@ -199,6 +199,9 @@ def evaluate(profile, criteria) -> dict:
 def template_explanation(report: dict, title: str) -> dict:
     """Plain-language explanation used when AI is not configured (or fails)."""
     v, c = report["verdict"], report["counts"]
+    if not any(r["is_mandatory"] for r in report["results"]):
+        return {"summary": f"{title} has no special eligibility rules to check — it is open to everyone it is meant for.",
+                "next_steps": ["Read how to apply on the official website.", "Keep the documents it asks for ready."]}
     if v == "eligible":
         summary = f"Based on your profile, you meet all {c['met']} checkable rules for {title}."
         steps = ["Gather the required documents.", "Read the official notification once before applying.",

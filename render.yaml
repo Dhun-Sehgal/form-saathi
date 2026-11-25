@@ -17,8 +17,6 @@ services:
         generateValue: true
       - key: FLASK_ENV
         value: production
-      - key: SEED_DEMO
-        value: "true"
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD

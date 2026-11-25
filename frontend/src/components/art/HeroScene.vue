@@ -94,7 +94,7 @@
         <path d="M37 27 L52 33.5 L37 40 L22 33.5 Z" style="fill: var(--ill-violet)" />
         <path d="M28 37 v6 q9 5.5 18 0 v-6 l-9 3.8 z" style="fill: var(--ill-violet)" />
         <text x="68" y="31" font-size="12" font-weight="700" style="fill: var(--ill-muted)">Scholarship match</text>
-        <text x="68" y="54" font-size="17" font-weight="800" style="fill: var(--ill-text)">₹25,000 / year</text>
+        <text x="68" y="54" font-size="17" font-weight="800" style="fill: var(--ill-text)">₹12,000 / year</text>
       </g>
     </g>
 
