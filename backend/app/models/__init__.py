@@ -6,6 +6,7 @@ from .engagement import (
     Application, ApplicationNote, ApplicationStatusHistory, Collection, Reminder, SavedOpportunity,
 )
 from .notifications import Notification, NotificationPreference
+from .resume import RESUME_TEMPLATES, Resume
 from .opportunity import (
     Category, DocumentType, EligibilityCriterion, Opportunity, OpportunityDate, Organization,
     RequiredDocument, opportunity_education_levels, opportunity_states,
@@ -17,7 +18,7 @@ __all__ = [
     "ChatMessage", "ChatSession", "Collection", "CorrectionReport", "DocumentType",
     "EligibilityCheck", "EligibilityCriterion", "Feedback", "Notification",
     "NotificationPreference", "Opportunity", "OpportunityDate", "Organization", "Reminder",
-    "RequiredDocument", "RevokedToken", "SavedOpportunity", "SourceVerificationLog", "State",
+    "RequiredDocument", "Resume", "RESUME_TEMPLATES", "RevokedToken", "SavedOpportunity", "SourceVerificationLog", "State",
     "UploadedDocument", "User", "UserProfile", "UserToken", "opportunity_education_levels",
     "opportunity_states", "profile_interest_categories",
 ]

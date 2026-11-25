@@ -146,3 +146,35 @@ def explain_eligibility(title: str, report: dict, language: str) -> dict:
         raise ValueError("bad explanation shape")
     per = {c["index"]: c["explanation"] for c in data.get("criteria", []) if isinstance(c, dict)}
     return {"summary": data["summary"], "next_steps": [str(s) for s in data["next_steps"]][:5], "per_criterion": per}
+
+
+BULLET_SCHEMA = {
+    "type": "object",
+    "properties": {"suggestions": {"type": "array", "items": {"type": "string"}}},
+    "required": ["suggestions"],
+    "additionalProperties": False,
+}
+
+
+def improve_bullet(bullet: str, role: str = "") -> list[str]:
+    """Rewrite one resume bullet into 3 stronger, ATS-friendly versions without inventing facts."""
+    prompt = (
+        "Rewrite this resume bullet into 3 stronger, ATS-friendly alternatives"
+        + (f" for a {role} resume" if role else "")
+        + ". Rules: start with a strong past-tense action verb; keep it to one line (under 30 words); keep every "
+        "fact, tool and number from the original; NEVER invent numbers, results, tools or employers — where a metric "
+        "would help but is not given, insert a placeholder like [X%] or [N users] for the student to fill in; no first "
+        "person; plain text only.\n\nOriginal bullet: " + bullet
+    )
+    response = _create(
+        max_tokens=1500,
+        messages=[{"role": "user", "content": prompt}],
+        output_config={"effort": "low", "format": {"type": "json_schema", "schema": BULLET_SCHEMA}},
+    )
+    if response.stop_reason == "refusal":
+        raise AIUnavailable("AI couldn't rewrite this bullet.")
+    data = json.loads(_text(response))
+    out = [str(s).strip() for s in data.get("suggestions", []) if str(s).strip()]
+    if not out:
+        raise ValueError("empty suggestions")
+    return out[:3]

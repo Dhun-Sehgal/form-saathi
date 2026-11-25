@@ -152,6 +152,44 @@
     </div>
   </section>
 
+  <!-- ATS RESUME BUILDER ------------------------------------------------------->
+  <section class="section bg-mist">
+    <div class="container">
+      <div class="row align-items-center g-4 g-lg-5">
+        <div class="col-lg-6">
+          <span class="section-eyebrow"><ScrollText :size="14" /> New · ATS resume builder</span>
+          <h2 class="section-title mt-2 mb-3">Found the internship? Make your resume ready for it.</h2>
+          <p class="section-lead mb-4">Build a clean one-column resume that applicant tracking systems can read, run 15 clear readiness checks, and see which keywords from any internship or job on FormSaathi your resume is missing.</p>
+          <div class="d-grid gap-3 mb-4">
+            <div v-for="f in resumeFeatures" :key="f.title" class="d-flex gap-3">
+              <span class="icon-tile icon-tile-sm" :class="f.tint"><component :is="f.icon" /></span>
+              <div><div class="fw-bold">{{ f.title }}</div><div class="small text-muted">{{ f.text }}</div></div>
+            </div>
+          </div>
+          <router-link to="/register" class="btn btn-primary btn-lg btn-pill">Build my resume <ArrowRight :size="18" /></router-link>
+        </div>
+        <div class="col-lg-6">
+          <div class="position-relative mx-auto" style="max-width: 520px" aria-hidden="true">
+            <div class="fs-card p-4 shadow-soft" style="border-radius: 1.25rem; font-size: .78rem">
+              <div class="text-center mb-2"><div class="fw-bold" style="font-size: 1.15rem; font-variant: small-caps; letter-spacing: .03em">Riya Deshmukh</div><div class="text-muted">Pune, Maharashtra | riya@email.com | GitHub | LinkedIn</div></div>
+              <div v-for="sec in mockResume" :key="sec.h" class="mb-2">
+                <div class="fw-bold text-uppercase pb-1 mb-1" style="font-size: .72rem; letter-spacing: .06em; border-bottom: 1px solid var(--fs-text)">{{ sec.h }}</div>
+                <div v-for="ln in sec.lines" :key="ln" class="d-flex gap-2"><span class="text-muted">•</span><span>{{ ln }}</span></div>
+              </div>
+            </div>
+            <div class="phone-chip float d-flex align-items-center gap-2" style="top: -18px; right: -10px">
+              <span class="icon-tile icon-tile-sm tint-mint"><ListChecks /></span><div><div class="fw-bold">14 / 15 checks</div><div class="text-muted" style="font-size: .72rem">ATS readiness</div></div>
+            </div>
+            <div class="phone-chip float-2 d-flex align-items-center gap-2" style="bottom: -20px; left: -10px">
+              <span class="icon-tile icon-tile-sm tint-peach"><Target /></span><div><div class="fw-bold">82% keyword match</div><div class="text-muted" style="font-size: .72rem">RBI Summer Placement</div></div>
+            </div>
+          </div>
+          <p class="text-center small text-muted mt-4 mb-0">Example resume for illustration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FEATURED --------------------------------------------------------------->
   <section class="section pt-0">
     <div class="container">
@@ -259,7 +297,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import {
   ArrowRight, BadgeCheck, Bell, Bot, CalendarClock, Check, CircleCheck, FileCheck2, Flame, Heart, HelpCircle,
-  KanbanSquare, Languages, ListChecks, MessageCircleQuestion, Route, Scale, Search, Shapes, ShieldCheck, Smartphone, Sparkles,
+  KanbanSquare, Languages, ListChecks, MessageCircleQuestion, Route, Scale, ScrollText, Search, Shapes, ShieldCheck, Smartphone, Sparkles, Target,
   UserRoundCheck, Users,
 } from 'lucide-vue-next'
 import api from '@/api'
@@ -324,6 +362,18 @@ const why = [
   { icon: Bell, title: 'Deadline reminders', text: 'In-app and email reminders before deadlines and for missing documents.', tint: 'tint-peach' },
   { icon: ShieldCheck, title: 'Private by design', text: 'Your documents are never public. Optional fields stay optional.', tint: 'tint-butter' },
   { icon: FileCheck2, title: 'Honest data labels', text: 'Verified, demo and AI-generated content are always clearly marked.', tint: 'tint-lilac' },
+  { icon: ScrollText, title: 'ATS resume builder', text: 'One-column resumes recruiters’ systems can read, with keyword matching for every opportunity.', tint: 'tint-sky' },
+  { icon: KanbanSquare, title: 'Application tracker', text: 'Every application from interested to approved, with notes, dates and reminders.', tint: 'tint-peach' },
+]
+const resumeFeatures = [
+  { icon: ListChecks, title: '15 transparent ATS checks', text: 'Contact details, action verbs, real numbers, length, dates and more — no made-up score.', tint: 'tint-mint' },
+  { icon: Target, title: 'Keyword match for any opportunity', text: 'Pick an internship on FormSaathi or paste a job description to see missing keywords.', tint: 'tint-peach' },
+  { icon: FileCheck2, title: 'PDF that parsers can read', text: 'Single column, standard headings, real text. Starts from your FormSaathi profile.', tint: 'tint-lavender' },
+]
+const mockResume = [
+  { h: 'Experience', lines: ['Built a Flask dashboard used by 40 classmates to track deadlines', 'Reduced report time by 35% by automating SQL queries'] },
+  { h: 'Projects', lines: ['Designed a 7-table schema for a hospital booking app (Vue.js, Flask)'] },
+  { h: 'Skills', lines: ['Python, SQL, Flask, Vue.js, Pandas, Git'] },
 ]
 const faqs = [
   { q: 'Is FormSaathi free?', a: 'Yes. Creating a profile, discovering opportunities, checking eligibility and tracking applications are free.' },

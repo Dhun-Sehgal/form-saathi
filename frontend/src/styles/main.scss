@@ -504,3 +504,12 @@ a { transition: color .15s var(--fs-ease); }
 .dropdown-menu { border-radius: 1rem; border-color: var(--fs-border); box-shadow: var(--fs-shadow-lg); padding: .4rem; background: var(--fs-surface); }
 .dropdown-item { border-radius: .6rem; padding: .5rem .75rem; display: flex; align-items: center; gap: .55rem; color: var(--fs-text); font-weight: 500; &:hover { background: var(--fs-primary-50); color: var(--fs-primary-600); } &.active, &:active { background: var(--fs-primary-50); color: var(--fs-primary-600); } }
 .alert { border-radius: 1rem; }
+
+// ---- Resume builder -------------------------------------------------------------
+.resume-side { position: sticky; top: 5.5rem; }
+@include media-breakpoint-down(lg) { .resume-side { position: static; } }
+.resume-paper { background: #fff !important; color: #111; padding: 28px 30px; border-radius: .9rem; box-shadow: var(--fs-shadow-md); max-height: calc(100vh - 11rem); overflow: auto; }
+@include media-breakpoint-down(lg) { .resume-paper { max-height: none; padding: 18px 16px; } }
+.resume-paper .resume-doc { font-size: 9.5pt; }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

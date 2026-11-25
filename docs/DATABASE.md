@@ -44,7 +44,7 @@ erDiagram
     opportunities ||--o{ correction_reports : "reported on"
 ```
 
-## Tables (31)
+## Tables (32)
 
 | Domain | Table | Purpose | Key constraints |
 |--------|-------|---------|-----------------|
@@ -69,6 +69,7 @@ erDiagram
 | | `application_notes` | User notes | |
 | | `reminders` | Personal reminders | index (`sent_at`, `remind_at`) for the worker |
 | Documents | `uploaded_documents` | Private vault metadata | `stored_filename` unique (random); CHECK size > 0; `sha256`; soft delete |
+| Resumes | `resumes` | ATS resume builder documents (JSON content, template, target role) | FK cascade on user; index (user, updated_at); max 10 per user (API) |
 | AI | `chat_sessions` / `chat_messages` | Saathi AI history | UUID session id; token usage per message |
 | | `eligibility_checks` | Rule-engine verdict + optional AI explanation | `profile_hash` + `criteria_hash` for cache invalidation |
 | Notify | `notifications` | In-app inbox | UNIQUE (user, `dedupe_key`) prevents duplicate reminders |

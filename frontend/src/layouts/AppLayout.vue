@@ -6,7 +6,7 @@
 import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Bell, Bookmark, Bot, CalendarDays, Compass, FileText, KanbanSquare, LayoutDashboard, Settings, User } from 'lucide-vue-next'
+import { Bell, Bookmark, Bot, CalendarDays, Compass, FileText, KanbanSquare, LayoutDashboard, ScrollText, Settings, User } from 'lucide-vue-next'
 import api from '@/api'
 import { useUi } from '@/stores/ui'
 import ShellLayout from './ShellLayout.vue'
@@ -22,6 +22,7 @@ const nav = computed(() => [
   { to: '/app/tracker', label: t('nav.tracker'), icon: KanbanSquare },
   { to: '/app/documents', label: t('nav.documents'), icon: FileText },
   { to: '/app/calendar', label: t('nav.calendar'), icon: CalendarDays },
+  { to: '/app/resume', label: t('nav.resume'), icon: ScrollText },
   { to: '/app/saathi', label: t('nav.saathi'), icon: Bot },
   { section: 'Account' },
   { to: '/app/notifications', label: t('nav.notifications'), icon: Bell, badge: ui.unread || null },

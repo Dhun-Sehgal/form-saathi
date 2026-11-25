@@ -351,7 +351,7 @@ on('delete', '/profile/account', async ({ data }) => {
   if (u.password_hash !== await sha(data?.password || '')) err(422, 'validation_error', 'Password is incorrect.', { password: 'Incorrect.' })
   if (u.role === 'admin' && S.users.filter((x) => x.role === 'admin').length <= 1) err(409, 'last_admin', 'You are the only admin. Promote another admin before deleting this account.')
   for (const d of S.documents.filter((x) => x.user_id === u.id)) await idbDo('readwrite', (st) => st.delete(d.id))
-  for (const t of ['saved', 'collections', 'applications', 'reminders', 'notifications', 'documents', 'chats']) S[t] = S[t].filter((x) => x.user_id !== u.id)
+  for (const t of ['saved', 'collections', 'applications', 'reminders', 'notifications', 'documents', 'chats', 'resumes']) S[t] = (S[t] || []).filter((x) => x.user_id !== u.id)
   S.users = S.users.filter((x) => x.id !== u.id); delete S.profiles[u.id]; delete S.prefs[u.id]; S.session = null
   return { message: 'Your account and personal data have been deleted.' }
 })
@@ -457,6 +457,47 @@ on('get', '/documents/:id/file', async ({ id }) => { const d = ownDoc(id); const
 on('patch', '/documents/:id', ({ id, data }) => { const d = ownDoc(id); for (const k of ['label', 'document_type_id', 'issued_on', 'expires_on']) if (k in data) d[k] = data[k] || null; return { document: docDict(d) } })
 on('delete', '/documents/:id', async ({ id }) => { const d = ownDoc(id); await idbDo('readwrite', (st) => st.delete(d.id)); d.deleted_at = now(); d.original_filename = 'deleted'; return { ok: true } })
 on('get', '/documents/checklist/:id', ({ id }) => { const o = findOpp(id); return { ...checklist(me().id, o), opportunity: { id: o.id, slug: o.slug, title: o.title, deadline: o.deadline } } })
+
+// resumes (ATS resume builder) — same shapes as backend/app/api/resumes.py
+const RESUME_LIMIT = 10
+const ownResume = (id) => (S.resumes || []).find((x) => x.id === Number(id) && x.user_id === me().id) || err(404, 'not_found', 'Resume not found.')
+const resumeDict = (x, full = true) => ({ id: x.id, title: x.title, target_role: x.target_role, template: x.template, created_at: x.created_at, updated_at: x.updated_at, ...(full ? { data: JSON.parse(JSON.stringify(x.data || {})) } : {}) })
+function profilePrefill(u) {
+  const p = S.profiles[u.id] || {}
+  const labels = { class_10: 'Class 10', class_12: 'Class 12', diploma: 'Diploma', iti: 'ITI', undergraduate: "Bachelor's degree", postgraduate: "Master's degree", doctorate: 'PhD' }
+  const education = []
+  if (p.institution || p.course) {
+    const degree = [p.course, p.stream ? `(${p.stream})` : null].filter(Boolean).join(' ') || labels[p.education_level] || ''
+    const score = p.marks_value == null ? '' : p.marks_type === 'cgpa' ? `CGPA: ${p.marks_value}` : `${p.marks_value}%`
+    education.push({ school: p.institution || '', degree, start: '', end: '', score, details: '' })
+  }
+  const state = S.states.find((x) => x.code === p.state_code)?.name
+  return { basics: { name: p.full_name || '', headline: '', email: u.email, phone: '', location: [p.city, state].filter(Boolean).join(', '), links: [] },
+    summary: '', experience: [], projects: [], education, skills: (p.skills || []).length ? [{ group: 'Skills', items: p.skills.join(', ') }] : [], achievements: [], certifications: [] }
+}
+function checkResume(data) {
+  need((data.title || '').trim().length >= 1 && data.title.length <= 120, 'title', 'Enter a name for this resume.')
+  if (data.template) need(['classic', 'modern'].includes(data.template), 'template', 'Choose classic or modern.')
+  const d = data.data || {}
+  for (const k of ['experience', 'projects']) for (const it of d[k] || []) need((it.bullets || []).length <= 8, k, 'Keep it to 8 bullets or fewer.')
+}
+on('get', '/resumes', () => { const u = me(); return { items: (S.resumes || []).filter((x) => x.user_id === u.id).sort((a, b) => b.updated_at.localeCompare(a.updated_at)).map((x) => resumeDict(x, false)), ai_configured: false } })
+on('post', '/resumes', ({ data }) => {
+  const u = me(); checkResume(data); S.resumes ||= []
+  if (S.resumes.filter((x) => x.user_id === u.id).length >= RESUME_LIMIT) err(409, 'limit_reached', `You can keep up to ${RESUME_LIMIT} resumes. Delete one to create another.`)
+  const x = { id: nextId('resumes'), user_id: u.id, title: data.title.trim(), target_role: data.target_role || null, template: data.template || 'classic', data: data.from_profile ? profilePrefill(u) : (data.data || {}), created_at: now(), updated_at: now() }
+  S.resumes.push(x); return { resume: resumeDict(x) }
+})
+on('post', '/resumes/improve-bullet', () => err(503, 'ai_not_configured', 'Saathi AI needs the FormSaathi server with an AI key. This browser-only preview has no AI server — the ATS checks still work.'))
+on('get', '/resumes/:id', ({ id }) => ({ resume: resumeDict(ownResume(id)), ai_configured: false }))
+on('put', '/resumes/:id', ({ id, data }) => { const x = ownResume(id); checkResume(data); Object.assign(x, { title: data.title.trim(), target_role: data.target_role || null, template: data.template || 'classic', data: data.data || {}, updated_at: now() }); return { resume: resumeDict(x) } })
+on('post', '/resumes/:id/duplicate', ({ id }) => {
+  const src = ownResume(id), u = me()
+  if (S.resumes.filter((x) => x.user_id === u.id).length >= RESUME_LIMIT) err(409, 'limit_reached', `You can keep up to ${RESUME_LIMIT} resumes. Delete one to create another.`)
+  const x = { ...JSON.parse(JSON.stringify(src)), id: nextId('resumes'), title: `${src.title} (copy)`.slice(0, 120), created_at: now(), updated_at: now() }
+  S.resumes.push(x); return { resume: resumeDict(x) }
+})
+on('delete', '/resumes/:id', ({ id }) => { const x = ownResume(id); S.resumes = S.resumes.filter((y) => y.id !== x.id); return { ok: true } })
 
 // applications
 const ownApp = (id) => S.applications.find((a) => a.id === Number(id) && a.user_id === me().id) || err(404, 'not_found', 'Application not found.')

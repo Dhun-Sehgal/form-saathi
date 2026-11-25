@@ -32,6 +32,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 - **Document vault** — private uploads (PDF/JPG/PNG/WebP, magic-byte checked), expiry tracking, per-opportunity checklists, downloadable checklists.
 - **Application tracker** — board and list views, 8 statuses, user-confirmed history timeline, notes, reminders, application date and reference number.
 - **Calendar** — deadlines, important dates, applied dates and reminders.
+- **ATS resume builder** — one-column, ATS-safe resumes (Classic / Modern), prefilled from the profile, with 15 transparent readiness checks, a per-bullet coach, keyword matching against any FormSaathi opportunity or a pasted job description, optional Saathi AI bullet rewrites (never invents facts), autosave and PDF / .txt export.
 - **Notifications** — deadline, missing-document, status check-in and reminder notifications (deduplicated), in-app and email, with preferences.
 - **Admin panel** — analytics, opportunity editor with structured eligibility-rule builder, verification workflow (verify → publish, audit log), corrections queue, categories, users & roles, announcements, featured listings, feedback.
 - **Trust labels everywhere** — *Verified* / *Demo* / *Pending verification* / *Expired* / *AI guidance*. The **database itself** refuses to mark demo data as verified.
@@ -48,7 +49,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 | Database | PostgreSQL (SQLite supported for quick local dev) |
 | AI | Anthropic Claude via server-side adapter (`LLM_API_KEY`), structured outputs for explanations |
 | Jobs | APScheduler worker / `flask run-jobs` |
-| Tests | pytest (51 tests, run on SQLite **and** PostgreSQL), Vitest |
+| Tests | pytest (59 tests, run on SQLite **and** PostgreSQL), Vitest (14), Playwright end-to-end (62 steps) |
 | Deploy | Vercel + GitHub Pages (browser-only preview), Docker → Render (full app), GitHub Actions CI |
 
 ## Run it locally

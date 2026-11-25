@@ -129,7 +129,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Bookmark, Bot, CalendarDays, CircleCheck, Compass, FileText, FileWarning, KanbanSquare, Megaphone, Send, UserRound } from 'lucide-vue-next'
+import { Bookmark, Bot, CalendarDays, ScrollText, CircleCheck, Compass, FileText, FileWarning, KanbanSquare, Megaphone, Send, UserRound } from 'lucide-vue-next'
 import api from '@/api'
 import { useAuth } from '@/stores/auth'
 import { formatDate, label, STATUS_COLORS, timeAgo } from '@/utils/format'
@@ -161,7 +161,7 @@ const maxActivity = computed(() => Math.max(1, ...d.value.weekly_activity.map((w
 const quick = [
   { label: 'Find matches', to: '/app/discover', icon: Compass },
   { label: 'Upload document', to: '/app/documents', icon: FileText },
-  { label: 'Ask Saathi', to: '/app/saathi', icon: Bot },
+  { label: 'Build resume', to: '/app/resume', icon: ScrollText },
   { label: 'Update profile', to: '/app/profile', icon: UserRound },
 ]
 </script>

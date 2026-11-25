@@ -241,6 +241,7 @@ Phase 4, rule-based and explainable: candidate set = published + verified-or-dem
 | `ai` | `GET/POST /ai/sessions` · `GET /ai/sessions/:id` · `POST /ai/sessions/:id/messages` · `DELETE /ai/sessions/:id` · `GET /ai/status` |
 | `documents` | `GET /documents` · `POST /documents` (multipart) · `GET /documents/:id/file` (auth'd stream) · `PATCH/DELETE /documents/:id` · `GET /documents/checklist/:opportunity_id` · `GET /documents/checklist/:opportunity_id.pdf` |
 | `applications` | CRUD `/applications` · `PATCH /applications/:id/status` · `GET /applications/:id/history` · CRUD `/applications/:id/notes` · CRUD `/reminders` · `GET /calendar?from=&to=` |
+| `resumes` | CRUD `/resumes` (+ `from_profile` prefill) · `POST /resumes/:id/duplicate` · `POST /resumes/improve-bullet` (Saathi AI, 503 when not configured). ATS checks and keyword matching run client-side in `frontend/src/utils/ats.js`. |
 | `notifications` | `GET /notifications` · `POST /notifications/:id/read` · `POST /notifications/read-all` · `GET/PUT /notifications/preferences` |
 | `meta` | `GET /meta/categories` · `GET /meta/states` · `GET /meta/document-types` · `GET /meta/announcements` · `POST /feedback` · `GET /health` |
 | `admin` | `GET /admin/stats` · CRUD `/admin/opportunities` (+ `/criteria`, `/documents`, `/dates`) · `POST /admin/opportunities/:id/verify` · `POST .../status` · CRUD `/admin/categories` · `GET/PATCH /admin/users` · `GET/PATCH /admin/corrections` · CRUD `/admin/announcements` · `PUT /admin/featured` |

@@ -32,10 +32,10 @@ def create_app(config_name: str | None = None) -> Flask:
     jwt.init_app(app)
     limiter.init_app(app)
 
-    from .api import admin, ai, auth, documents, meta, opportunities, profile, tracker
+    from .api import admin, ai, auth, documents, meta, opportunities, profile, resumes, tracker
     from .utils.errors import register_error_handlers
 
-    for module in (auth, profile, meta, opportunities, ai, documents, tracker, admin):
+    for module in (auth, profile, meta, opportunities, ai, documents, tracker, resumes, admin):
         app.register_blueprint(module.bp)
     auth.register_jwt_callbacks(jwt)
     register_error_handlers(app)

@@ -90,6 +90,7 @@
               <button class="btn btn-primary" :disabled="busy.track" @click="track"><KanbanSquare :size="17" /> {{ o.application_status ? 'View in tracker' : t('common.track') }}</button>
               <button class="btn btn-soft" :disabled="busy.save" @click="toggleSave"><BookmarkCheck v-if="o.saved" :size="17" /><Bookmark v-else :size="17" /> {{ o.saved ? t('common.saved') : t('common.save') }}</button>
               <button class="btn btn-soft" @click="askSaathi"><Bot :size="17" /> Ask Saathi about this</button>
+              <button class="btn btn-soft" @click="tailorResume"><ScrollText :size="17" /> Tailor my resume</button>
               <a :href="o.apply_url || o.official_url || o.source_url" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary"><ExternalLink :size="16" /> {{ t('common.apply') }}</a>
             </div>
             <hr class="border-soft" />
@@ -126,7 +127,7 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { ArrowLeft, Bookmark, BookmarkCheck, Bot, CalendarClock, Clock, Download, ExternalLink, FileText, Flag, FlaskConical, KanbanSquare, ListChecks, MapPin, ShieldCheck } from 'lucide-vue-next'
+import { ArrowLeft, ScrollText, Bookmark, BookmarkCheck, Bot, CalendarClock, Clock, Download, ExternalLink, FileText, Flag, FlaskConical, KanbanSquare, ListChecks, MapPin, ShieldCheck } from 'lucide-vue-next'
 import api from '@/api'
 import { useAuth } from '@/stores/auth'
 import { useMeta } from '@/stores/meta'
@@ -191,6 +192,7 @@ async function askSaathi() {
     router.push({ path: '/app/saathi', query: { session: r.session.id } })
   } catch (e) { ui.error(e) }
 }
+function tailorResume() { if (!needLogin()) router.push({ path: '/app/resume', query: { match: o.value.id } }) }
 async function sendReport() {
   reportErr.value = {}
   if (report.message.trim().length < 10) { reportErr.value = { message: 'Please describe the issue (at least 10 characters).' }; return }
