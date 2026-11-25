@@ -119,6 +119,13 @@ Notes on free hosting plans: free web services sleep when idle (the first reques
 
 The same Docker image runs on any container host (Railway, Fly.io, a VPS). It needs `DATABASE_URL`, `SECRET_KEY` and `JWT_SECRET_KEY`.
 
+### Vercel (browser-only preview)
+
+The Vercel project builds automatically on every push to `main` with these settings: Root Directory `frontend`,
+Build Command `npm run build:vercel`, Output Directory `dist-vercel`, Node 22. Clean URLs work through the rewrite in
+[`frontend/vercel.json`](frontend/vercel.json). GitHub Pages builds the same preview with hash URLs via
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml).
+
 ## Data accuracy policy
 
 - Real opportunities enter only through the admin editor with an **official source URL**, stay *Pending verification* until a reviewer verifies them, and must be verified before they can be published.

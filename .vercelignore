@@ -1,7 +1,0 @@
-backend/
-**/node_modules
-frontend/dist
-frontend/dist-preview
-frontend/dist-vercel
-**/*.db
-.github/

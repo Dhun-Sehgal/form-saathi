@@ -15,6 +15,7 @@ frontend/dist/
 frontend/dist-preview/
 frontend/dist-vercel/
 .vercel/
+.env.local
 
 # OS / editor
 .DS_Store
