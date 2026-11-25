@@ -13,11 +13,11 @@
         <Sun v-if="ui.theme === 'dark'" :size="18" /><Moon v-else :size="18" />
       </button>
       <template v-if="auth.isLoggedIn">
-        <router-link :to="auth.isAdmin ? '/admin' : '/app'" class="btn btn-primary d-none d-sm-inline-flex">{{ t('nav.dashboard') }}</router-link>
+        <router-link :to="auth.isAdmin ? '/admin' : '/app'" class="btn btn-primary btn-pill d-none d-sm-inline-flex">{{ t('nav.dashboard') }}</router-link>
       </template>
       <template v-else>
         <router-link to="/login" class="btn btn-ghost d-none d-sm-inline-flex">{{ t('nav.login') }}</router-link>
-        <router-link to="/register" class="btn btn-primary d-none d-sm-inline-flex">{{ t('nav.start') }}</router-link>
+        <router-link to="/register" class="btn btn-primary btn-pill d-none d-sm-inline-flex">{{ t('nav.start') }}</router-link>
       </template>
       <button class="btn btn-ghost btn-icon d-lg-none" :aria-expanded="menu" aria-label="Menu" @click="menu = !menu"><Menu :size="22" /></button>
     </nav>
@@ -40,7 +40,7 @@
 
   <main id="main"><slot /></main>
 
-  <footer class="footer border-top border-soft bg-surface mt-5">
+  <footer class="footer border-top border-soft mt-5">
     <div class="container py-5">
       <div class="row g-4">
         <div class="col-lg-4">

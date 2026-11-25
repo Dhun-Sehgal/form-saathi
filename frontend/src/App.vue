@@ -1,8 +1,9 @@
 <template>
   <a href="#main" class="skip-link">Skip to content</a>
-  <div v-if="IS_PREVIEW" class="preview-banner" role="note">
-    <strong>Preview mode:</strong> runs entirely in your browser with demo data — nothing is sent to a server.
+  <div v-if="IS_PREVIEW && !bannerHidden" class="preview-banner" role="note">
+    ✨ <strong>Preview mode:</strong> everything runs in your browser with demo data — nothing is sent to a server.
     <a href="https://github.com/anjalikokare/formsaathi#deploy-the-full-app" target="_blank" rel="noopener">Deploy the full app</a>
+    <button class="btn-close position-absolute top-50 end-0 translate-middle-y me-3" style="font-size:.65rem" aria-label="Hide preview notice" @click="hideBanner" />
   </div>
   <component :is="layout">
     <router-view v-slot="{ Component, route }">
@@ -14,7 +15,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { IS_PREVIEW } from '@/api'
 import { useUi } from '@/stores/ui'
@@ -30,6 +31,8 @@ const route = useRoute()
 const ui = useUi()
 const meta = useMeta()
 ui.applyTheme()
+const bannerHidden = ref(sessionStorage.getItem('fs-preview-banner') === 'hidden')
+function hideBanner() { bannerHidden.value = true; sessionStorage.setItem('fs-preview-banner', 'hidden') }
 onMounted(() => meta.load().catch(() => {}))
 
 const layout = computed(() => {

@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:preview": "vite build --mode preview --outDir dist-preview",
+    "build:vercel": "vite build --mode vercel --outDir dist-vercel",
     "serve": "vite preview",
     "test": "vitest run"
   },

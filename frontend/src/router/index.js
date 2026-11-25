@@ -51,8 +51,9 @@ const routes = [
 ]
 
 const router = createRouter({
-  // GitHub Pages has no server-side rewrites, so the preview uses hash URLs.
-  history: IS_PREVIEW ? createWebHashHistory(import.meta.env.BASE_URL) : createWebHistory(import.meta.env.BASE_URL),
+  // GitHub Pages has no server-side rewrites, so its preview build uses hash URLs.
+  // Vercel rewrites every path to index.html, so that build keeps clean URLs (VITE_HASH_ROUTER=false).
+  history: IS_PREVIEW && import.meta.env.VITE_HASH_ROUTER !== 'false' ? createWebHashHistory(import.meta.env.BASE_URL) : createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, saved) {
     if (saved) return saved

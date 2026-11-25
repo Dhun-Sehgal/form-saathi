@@ -1,6 +1,6 @@
 <template>
-  <div class="fs-card p-4 p-md-5 w-100 shadow-soft" style="max-width: 440px">
-    <h1 class="h3 fw-bold mb-1">Welcome back</h1>
+  <AuthShell heading="Welcome back!" sub="Pick up right where you left off — your matches, checklists and deadlines are waiting.">
+    <h1 class="h3 fw-bold mb-1">Log in to FormSaathi 👋</h1>
     <p class="text-muted mb-4">Log in to continue your applications.</p>
     <div v-if="IS_PREVIEW" class="demo-ribbon small mb-3">
       <strong>Preview:</strong> create an account, or try the admin panel with
@@ -20,10 +20,10 @@
         </div>
       </div>
       <div v-if="error" class="alert alert-danger py-2 small mb-0" role="alert">{{ error }}</div>
-      <button class="btn btn-primary btn-lg" :disabled="busy || !email || !password">{{ busy ? 'Logging in…' : 'Log in' }}</button>
+      <button class="btn btn-primary btn-lg btn-pill" :disabled="busy || !email || !password">{{ busy ? 'Logging in…' : 'Log in' }}</button>
     </form>
-    <p class="text-center text-muted small mt-4 mb-0">New to FormSaathi? <router-link :to="{ name: 'register', query: route.query }">Create a free account</router-link></p>
-  </div>
+    <p class="text-center text-muted small mt-4 mb-0">New to FormSaathi? <router-link :to="{ name: 'register', query: route.query }" class="fw-bold">Create a free account</router-link></p>
+  </AuthShell>
 </template>
 
 <script setup>
@@ -34,6 +34,7 @@ import { IS_PREVIEW } from '@/api'
 import { setLanguage } from '@/i18n'
 import { useAuth } from '@/stores/auth'
 import { useUi } from '@/stores/ui'
+import AuthShell from '@/components/AuthShell.vue'
 
 const PREVIEW_ADMIN = { email: 'admin@formsaathi.demo', password: 'admin1234' }
 const route = useRoute()

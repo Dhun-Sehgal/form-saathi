@@ -15,8 +15,8 @@ export const LABELS = {
 export const label = (group, key) => (LABELS[group] && LABELS[group][key]) || (key ? String(key).replace(/_/g, ' ') : '')
 
 export const STATUS_COLORS = {
-  interested: '#94A3B8', saved: '#A78BFA', preparing_documents: '#F59E0B', ready_to_apply: '#0EA5E9',
-  applied: '#6366F1', under_review: '#8B5CF6', approved: '#16A34A', rejected: '#DC2626',
+  interested: '#A9A4C9', saved: '#B39DFF', preparing_documents: '#FFB020', ready_to_apply: '#36B6F5',
+  applied: '#6A4CF0', under_review: '#B86BFF', approved: '#1FB57F', rejected: '#E5484D',
 }
 
 export function formatDate(value, opts = { day: 'numeric', month: 'short', year: 'numeric' }) {

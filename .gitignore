@@ -13,6 +13,8 @@ backend/instance/
 node_modules/
 frontend/dist/
 frontend/dist-preview/
+frontend/dist-vercel/
+.vercel/
 
 # OS / editor
 .DS_Store

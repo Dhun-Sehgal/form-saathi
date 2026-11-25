@@ -10,7 +10,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 
 **Discover → Check eligibility → Understand requirements → Prepare documents → Apply → Track**
 
-[Live preview](https://anjalikokare.github.io/formsaathi/) · [Deploy the full app](#deploy-the-full-app) · [Architecture](docs/ARCHITECTURE.md) · [Database](docs/DATABASE.md) · [Design](docs/DESIGN.md)
+[Live on Vercel](https://formsaathi.vercel.app) · [GitHub Pages mirror](https://anjalikokare.github.io/formsaathi/) · [Deploy the full app](#deploy-the-full-app) · [Architecture](docs/ARCHITECTURE.md) · [Database](docs/DATABASE.md) · [Design](docs/DESIGN.md)
 
 </div>
 
@@ -20,7 +20,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 
 | | What it is | Data |
 |---|---|---|
-| **[Live preview (GitHub Pages)](https://anjalikokare.github.io/formsaathi/)** | The complete Vue app running **entirely in your browser** — a built-in mock of the API stores everything in `localStorage`/IndexedDB. Every page works: sign up, onboarding, discovery, eligibility, tracker, documents, calendar, admin panel. | Demo data only. Nothing leaves your browser. Saathi AI chat is off (no server). Admin login: `admin@formsaathi.demo` / `admin1234`. |
+| **Live preview** — [Vercel](https://formsaathi.vercel.app) · [GitHub Pages](https://anjalikokare.github.io/formsaathi/) | The complete Vue app running **entirely in your browser** — a built-in mock of the API stores everything in `localStorage`/IndexedDB. Every page works: sign up, onboarding, discovery, eligibility, tracker, documents, calendar, admin panel. | Demo data only. Nothing leaves your browser. Saathi AI chat is off (no server). Admin login: `admin@formsaathi.demo` / `admin1234`. |
 | **Full app (Flask + PostgreSQL)** | The real product: Flask REST API, PostgreSQL, secure cookie auth, private file storage, Saathi AI (with an API key), email (with SMTP). | Your database. Deploy with one click — see below. |
 
 ## Features
@@ -49,7 +49,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 | AI | Anthropic Claude via server-side adapter (`LLM_API_KEY`), structured outputs for explanations |
 | Jobs | APScheduler worker / `flask run-jobs` |
 | Tests | pytest (51 tests, run on SQLite **and** PostgreSQL), Vitest |
-| Deploy | Docker → Render (blueprint), GitHub Pages (preview), GitHub Actions CI |
+| Deploy | Vercel + GitHub Pages (browser-only preview), Docker → Render (full app), GitHub Actions CI |
 
 ## Run it locally
 
@@ -84,7 +84,8 @@ Other useful commands:
 python -m pytest                     # backend tests (set TEST_DATABASE_URL to test on PostgreSQL)
 npm test                             # frontend unit tests
 npm run build                        # production build, served by Flask from frontend/dist
-npm run build:preview                # browser-only preview build (GitHub Pages)
+npm run build:preview                # browser-only preview build (GitHub Pages, hash URLs)
+npm run build:vercel                 # browser-only preview build (Vercel, clean URLs; see vercel.json)
 flask run-jobs                       # expire past deadlines + generate notifications
 python -m app.worker                 # run those jobs every 30 minutes
 flask purge-demo                     # remove all demo opportunities before a real launch

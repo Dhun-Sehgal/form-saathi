@@ -48,10 +48,10 @@ import { formatDate } from '@/utils/format'
 import StateBlock from '@/components/StateBlock.vue'
 
 const TYPE = {
-  deadline: { label: 'Deadline', color: '#E11D48', bg: '#FFE4E6', ink: '#9F1239' },
-  date: { label: 'Important date', color: '#4F46E5', bg: '#E0E7FF', ink: '#3730A3' },
-  reminder: { label: 'My reminder', color: '#D97706', bg: '#FEF3C7', ink: '#92400E' },
-  applied: { label: 'Applied', color: '#16A34A', bg: '#DCFCE7', ink: '#166534' },
+  deadline: { label: 'Deadline', color: '#FF5C8A', bg: 'var(--tint-peach)', ink: 'var(--ink-peach)' },
+  date: { label: 'Important date', color: '#6A4CF0', bg: 'var(--tint-lavender)', ink: 'var(--ink-lavender)' },
+  reminder: { label: 'My reminder', color: '#F2A20C', bg: 'var(--tint-butter)', ink: 'var(--ink-butter)' },
+  applied: { label: 'Applied', color: '#1FB57F', bg: 'var(--tint-mint)', ink: 'var(--ink-mint)' },
 }
 const pad = (n) => String(n).padStart(2, '0')
 const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`

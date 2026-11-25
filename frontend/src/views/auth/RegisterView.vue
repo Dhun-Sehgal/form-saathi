@@ -1,6 +1,6 @@
 <template>
-  <div class="fs-card p-4 p-md-5 w-100 shadow-soft" style="max-width: 460px">
-    <h1 class="h3 fw-bold mb-1">Create your free account</h1>
+  <AuthShell heading="Your opportunities, in one place." sub="Create a free profile in about 3 minutes. Optional details stay optional." art="student" :points="['Free forever for students', 'Explained in English, हिन्दी and मराठी', 'Export or delete your data any time']">
+    <h1 class="h3 fw-bold mb-1">Create your free account ✨</h1>
     <p class="text-muted mb-4">Takes about 3 minutes, including your profile.</p>
     <form class="d-grid gap-3" novalidate @submit.prevent="submit">
       <div>
@@ -18,7 +18,7 @@
         <input id="pw" v-model="form.password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" autocomplete="new-password" aria-describedby="pwhelp" />
         <div v-if="errors.password" class="invalid-feedback">{{ errors.password }}</div>
         <div id="pwhelp" class="form-text">At least 8 characters, with letters and numbers.</div>
-        <div class="d-flex gap-1 mt-2" aria-hidden="true"><div v-for="i in 3" :key="i" class="flex-fill rounded" style="height:4px" :style="{ background: strength >= i ? ['#F87171', '#F59E0B', '#16A34A'][strength - 1] : 'var(--fs-surface-2)' }" /></div>
+        <div class="d-flex gap-1 mt-2" aria-hidden="true"><div v-for="i in 3" :key="i" class="flex-fill rounded" style="height:4px" :style="{ background: strength >= i ? ['#FF6F91', '#FFC94D', '#34D1A2'][strength - 1] : 'var(--fs-surface-2)' }" /></div>
       </div>
       <div class="form-check">
         <input id="terms" v-model="form.accept_terms" type="checkbox" class="form-check-input" :class="{ 'is-invalid': errors.accept_terms }" />
@@ -26,10 +26,10 @@
         <div v-if="errors.accept_terms" class="invalid-feedback">{{ errors.accept_terms }}</div>
       </div>
       <div v-if="error" class="alert alert-danger py-2 small mb-0">{{ error }}</div>
-      <button class="btn btn-primary btn-lg" :disabled="busy">{{ busy ? 'Creating account…' : 'Create account' }}</button>
+      <button class="btn btn-primary btn-lg btn-pill" :disabled="busy">{{ busy ? 'Creating account…' : 'Create account' }}</button>
     </form>
-    <p class="text-center text-muted small mt-4 mb-0">Already have an account? <router-link :to="{ name: 'login', query: route.query }">Log in</router-link></p>
-  </div>
+    <p class="text-center text-muted small mt-4 mb-0">Already have an account? <router-link :to="{ name: 'login', query: route.query }" class="fw-bold">Log in</router-link></p>
+  </AuthShell>
 </template>
 
 <script setup>
@@ -37,6 +37,7 @@ import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '@/stores/auth'
 import { useUi } from '@/stores/ui'
+import AuthShell from '@/components/AuthShell.vue'
 
 const route = useRoute()
 const router = useRouter()

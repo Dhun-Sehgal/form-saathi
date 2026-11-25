@@ -2,21 +2,27 @@
   <StateBlock v-if="loading" kind="loading" :count="6" />
   <StateBlock v-else-if="error" kind="error" :message="error" @retry="load" />
   <div v-else>
-    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-      <div class="me-auto">
-        <h1 class="page-title">{{ t('dash.welcome', { name: d.name || auth.firstName }) }} 👋</h1>
-        <p class="page-sub">{{ t('dash.sub') }}</p>
+    <section class="welcome-banner mb-4">
+      <div class="d-flex align-items-center gap-4">
+        <div class="flex-grow-1 min-w-0">
+          <h1 class="page-title mb-1">{{ t('dash.welcome', { name: d.name || auth.firstName }) }} 👋</h1>
+          <p class="page-sub mb-3">{{ t('dash.sub') }}</p>
+          <div class="d-flex flex-wrap gap-2">
+            <router-link to="/app/discover" class="btn btn-white btn-pill"><Compass :size="17" /> {{ t('nav.discover') }}</router-link>
+            <router-link to="/app/tracker" class="btn btn-glass btn-pill"><KanbanSquare :size="17" /> {{ t('nav.tracker') }}</router-link>
+          </div>
+        </div>
+        <div class="d-none d-md-block flex-shrink-0 bg-surface rounded-xl p-2 float" style="transform: rotate(-3deg); box-shadow: 0 24px 50px -28px rgba(27,23,64,.7)"><SpotArt name="student" style="width: 190px" /></div>
       </div>
-      <router-link to="/app/discover" class="btn btn-primary"><Compass :size="17" /> {{ t('nav.discover') }}</router-link>
-    </div>
+    </section>
 
     <div v-for="a in d.announcements" :key="a.id" class="alert d-flex gap-2 mb-3" :class="a.level === 'important' ? 'alert-warning' : 'alert-info'"><Megaphone :size="18" class="flex-shrink-0 mt-1" /><div><strong>{{ a.title }}</strong> — {{ a.body }}</div></div>
 
     <!-- Stats -->
     <div class="row g-3 mb-4">
       <div v-for="s in stats" :key="s.label" class="col-6 col-lg-3">
-        <router-link :to="s.to" class="fs-card fs-card-hover stat-card d-flex gap-3 align-items-center text-decoration-none h-100">
-          <span class="icon-tile icon-tile-sm" :class="s.tint"><component :is="s.icon" /></span>
+        <router-link :to="s.to" class="fs-card fs-card-hover stat-card pastel d-flex gap-3 align-items-center text-decoration-none h-100" :class="s.tint">
+          <span class="icon-tile icon-tile-sm"><component :is="s.icon" /></span>
           <div><div class="stat-value" style="color: var(--fs-text)">{{ s.value }}</div><div class="stat-label">{{ s.label }}</div></div>
         </router-link>
       </div>
@@ -76,7 +82,7 @@
           <ul v-if="d.upcoming_deadlines.length" class="list-unstyled mb-0 d-grid gap-2">
             <li v-for="o in d.upcoming_deadlines" :key="o.id">
               <router-link :to="`/app/opportunities/${o.slug}`" class="d-flex gap-2 align-items-center text-decoration-none p-2 rounded-3 border border-soft">
-                <div class="text-center rounded-3 px-2 py-1 flex-shrink-0" :class="o.days_left <= 7 ? 'fs-badge-coral' : 'bg-lavender'" style="min-width: 52px"><div class="fw-bold font-display">{{ o.days_left }}</div><div style="font-size:.65rem">days</div></div>
+                <div class="text-center rounded-3 px-2 py-1 flex-shrink-0" :class="o.days_left <= 7 ? 'tint-peach' : 'tint-lavender'" style="min-width: 52px"><div class="fw-bold font-display">{{ o.days_left }}</div><div style="font-size:.65rem">days</div></div>
                 <div class="min-w-0"><div class="small fw-semibold text-truncate" style="color: var(--fs-text)">{{ o.title }}</div><div class="small text-muted">{{ formatDate(o.deadline) }}</div></div>
               </router-link>
             </li>
@@ -130,6 +136,7 @@ import { formatDate, label, STATUS_COLORS, timeAgo } from '@/utils/format'
 import OpportunityCard from '@/components/OpportunityCard.vue'
 import ProgressRing from '@/components/ProgressRing.vue'
 import StateBlock from '@/components/StateBlock.vue'
+import SpotArt from '@/components/art/SpotArt.vue'
 
 const { t } = useI18n()
 const auth = useAuth()

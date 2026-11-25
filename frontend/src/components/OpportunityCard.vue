@@ -1,5 +1,5 @@
 <template>
-  <article class="fs-card fs-card-hover fs-card-pad opp-card">
+  <article class="fs-card fs-card-hover fs-card-pad opp-card" :style="{ '--accent': `var(--accent-${o.category.color || 'lavender'})` }">
     <div class="d-flex align-items-start gap-3 mb-3">
       <CategoryIcon :name="o.category.icon" :color="o.category.color" small />
       <div class="min-w-0 flex-grow-1">
