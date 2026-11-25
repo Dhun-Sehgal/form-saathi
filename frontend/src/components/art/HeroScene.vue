@@ -1,7 +1,7 @@
 <!-- Hero illustration: a student using FormSaathi, surrounded by the things it helps with.
      Pure SVG, coloured through CSS variables so it adapts to dark mode. -->
 <template>
-  <svg viewBox="0 0 600 520" role="img" aria-labelledby="hs-title" class="w-100 h-auto d-block" style="font-family: 'Plus Jakarta Sans', Inter, sans-serif">
+  <svg viewBox="0 0 600 520" role="img" aria-labelledby="hs-title" class="w-100 h-auto d-block" style="font-family: var(--font-sans)">
     <title id="hs-title">Illustration: a student using FormSaathi on a laptop, with a scholarship match, an eligibility check, a deadline reminder and a document checklist floating around her.</title>
     <defs>
       <linearGradient id="hs-blob" x1="0" y1="0" x2="1" y2="1">
@@ -9,10 +9,10 @@
         <stop offset="1" style="stop-color: var(--ill-pink-2)" />
       </linearGradient>
       <linearGradient id="hs-logo" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#7C5CFC" /><stop offset=".55" stop-color="#A86BFF" /><stop offset="1" stop-color="#FF8FB1" />
+        <stop offset="0" stop-color="#7c68ee" /><stop offset="1" stop-color="#ec7f58" />
       </linearGradient>
       <filter id="hs-shadow" x="-30%" y="-30%" width="160%" height="170%">
-        <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#6A4CF0" flood-opacity=".16" />
+        <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#211f2e" flood-opacity=".14" />
       </filter>
     </defs>
 
@@ -54,8 +54,8 @@
     <rect x="208" y="318" width="220" height="118" rx="16" style="fill: var(--ill-paper); stroke: var(--ill-line)" stroke-width="3" />
     <rect x="298" y="357" width="40" height="40" rx="11" fill="url(#hs-logo)" />
     <path d="M311 365 h9 l7 7 v15 a2.5 2.5 0 0 1 -2.5 2.5 h-13.5 a2.5 2.5 0 0 1 -2.5 -2.5 v-19.5 a2.5 2.5 0 0 1 2.5 -2.5 z" fill="#fff" />
-    <rect x="312.5" y="378" width="10" height="2.4" rx="1.2" fill="#A86BFF" />
-    <rect x="312.5" y="383" width="7" height="2.4" rx="1.2" fill="#FF8FB1" />
+    <rect x="312.5" y="378" width="10" height="2.4" rx="1.2" fill="#7c68ee" />
+    <rect x="312.5" y="383" width="7" height="2.4" rx="1.2" fill="#ec7f58" />
     <path d="M190 432 H446 L436 446 H200 Z" style="fill: var(--ill-violet)" />
 
     <!-- plant -->
@@ -103,7 +103,7 @@
       <g transform="translate(396 50)">
         <rect width="184" height="56" rx="28" style="fill: var(--ill-paper)" filter="url(#hs-shadow)" />
         <circle cx="28" cy="28" r="18" style="fill: var(--ill-mint)" />
-        <path d="M20 28.5 l5.5 5.5 l10.5 -11" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M20 28.5 l5.5 5.5 l10.5 -11" fill="none" style="stroke: var(--ill-paper)" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
         <text x="54" y="34" font-size="15" font-weight="800" style="fill: var(--ink-mint)">You’re eligible!</text>
       </g>
     </g>
@@ -129,7 +129,7 @@
         <text x="184" y="31" text-anchor="end" font-size="12" font-weight="800" style="fill: var(--ill-violet)">2 / 3 ready</text>
         <g v-for="(row, i) in rows" :key="row.label" :transform="`translate(18 ${46 + i * 26})`">
           <rect width="18" height="18" rx="6" :style="row.done ? 'fill: var(--ill-mint)' : 'fill: none; stroke: var(--ill-violet-2)'" :stroke-width="row.done ? 0 : 2" />
-          <path v-if="row.done" d="M4.5 9.5 l3.2 3.2 l6 -6.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path v-if="row.done" d="M4.5 9.5 l3.2 3.2 l6 -6.5" fill="none" style="stroke: var(--ill-paper)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
           <text x="28" y="14" font-size="12.5" font-weight="600" style="fill: var(--ill-muted)">{{ row.label }}</text>
         </g>
       </g>

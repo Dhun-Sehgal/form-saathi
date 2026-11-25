@@ -48,10 +48,10 @@ import { formatDate } from '@/utils/format'
 import StateBlock from '@/components/StateBlock.vue'
 
 const TYPE = {
-  deadline: { label: 'Deadline', color: '#FF5C8A', bg: 'var(--tint-peach)', ink: 'var(--ink-peach)' },
-  date: { label: 'Important date', color: '#6A4CF0', bg: 'var(--tint-lavender)', ink: 'var(--ink-lavender)' },
-  reminder: { label: 'My reminder', color: '#F2A20C', bg: 'var(--tint-butter)', ink: 'var(--ink-butter)' },
-  applied: { label: 'Applied', color: '#1FB57F', bg: 'var(--tint-mint)', ink: 'var(--ink-mint)' },
+  deadline: { label: 'Deadline', color: 'var(--color-peach-500)', bg: 'var(--tint-peach)', ink: 'var(--ink-peach)' },
+  date: { label: 'Important date', color: 'var(--color-lavender-500)', bg: 'var(--tint-lavender)', ink: 'var(--ink-lavender)' },
+  reminder: { label: 'My reminder', color: 'var(--color-butter-500)', bg: 'var(--tint-butter)', ink: 'var(--ink-butter)' },
+  applied: { label: 'Applied', color: 'var(--color-mint-500)', bg: 'var(--tint-mint)', ink: 'var(--ink-mint)' },
 }
 const pad = (n) => String(n).padStart(2, '0')
 const iso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`

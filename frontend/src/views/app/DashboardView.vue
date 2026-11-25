@@ -8,11 +8,11 @@
           <h1 class="page-title mb-1">{{ t('dash.welcome', { name: d.name || auth.firstName }) }} 👋</h1>
           <p class="page-sub mb-3">{{ t('dash.sub') }}</p>
           <div class="d-flex flex-wrap gap-2">
-            <router-link to="/app/discover" class="btn btn-white btn-pill"><Compass :size="17" /> {{ t('nav.discover') }}</router-link>
+            <router-link to="/app/discover" class="btn btn-primary btn-pill"><Compass :size="17" /> {{ t('nav.discover') }}</router-link>
             <router-link to="/app/tracker" class="btn btn-glass btn-pill"><KanbanSquare :size="17" /> {{ t('nav.tracker') }}</router-link>
           </div>
         </div>
-        <div class="d-none d-md-block flex-shrink-0 bg-surface rounded-xl p-2 float" style="transform: rotate(-3deg); box-shadow: 0 24px 50px -28px rgba(27,23,64,.7)"><SpotArt name="student" style="width: 190px" /></div>
+        <div class="d-none d-md-block flex-shrink-0 bg-surface rounded-xl p-2 float" style="transform: rotate(-3deg); box-shadow: var(--fs-shadow-lg)"><SpotArt name="student" style="width: 190px" /></div>
       </div>
     </section>
 
@@ -52,8 +52,8 @@
           <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h6 fw-bold mb-0">{{ t('dash.progress') }}</h2><router-link to="/app/tracker" class="small">Open tracker</router-link></div>
           <div v-if="d.stats.tracked" class="d-grid gap-2">
             <div v-for="s in progressRows" :key="s.key" class="d-flex align-items-center gap-3 small">
-              <span class="text-nowrap" style="width: 150px">{{ s.label }}</span>
-              <div class="progress flex-grow-1" :aria-label="`${s.label}: ${s.count}`"><div class="progress-bar" :style="{ width: (s.count / d.stats.tracked) * 100 + '%', background: STATUS_COLORS[s.key] }" /></div>
+              <span class="text-nowrap d-flex align-items-center gap-2" style="width: 150px"><span class="status-dot" :style="{ background: STATUS_COLORS[s.key] }" />{{ s.label }}</span>
+              <div class="progress flex-grow-1" :aria-label="`${s.label}: ${s.count}`"><div class="progress-bar" :style="{ width: (s.count / d.stats.tracked) * 100 + '%' }" /></div>
               <span class="fw-semibold text-end" style="width: 24px">{{ s.count }}</span>
             </div>
           </div>
@@ -82,7 +82,7 @@
           <ul v-if="d.upcoming_deadlines.length" class="list-unstyled mb-0 d-grid gap-2">
             <li v-for="o in d.upcoming_deadlines" :key="o.id">
               <router-link :to="`/app/opportunities/${o.slug}`" class="d-flex gap-2 align-items-center text-decoration-none p-2 rounded-3 border border-soft">
-                <div class="text-center rounded-3 px-2 py-1 flex-shrink-0" :class="o.days_left <= 7 ? 'tint-peach' : 'tint-lavender'" style="min-width: 52px"><div class="fw-bold font-display">{{ o.days_left }}</div><div style="font-size:.65rem">days</div></div>
+                <div class="text-center rounded-3 px-2 py-1 flex-shrink-0" :class="o.days_left <= 7 ? 'tint-peach' : 'tint-lavender'" style="min-width: 52px"><div class="font-display" style="font-size: 1.45rem; line-height: 1.05">{{ o.days_left }}</div><div style="font-size:.65rem">days</div></div>
                 <div class="min-w-0"><div class="small fw-semibold text-truncate" style="color: var(--fs-text)">{{ o.title }}</div><div class="small text-muted">{{ formatDate(o.deadline) }}</div></div>
               </router-link>
             </li>

@@ -1,0 +1,130 @@
+// ============================================================================
+// FormSaathi palette — "Paper & Pastel". Change colours here only.
+//
+// Emits the same CSS variables as the design's Tailwind @theme (--color-paper, --color-ink,
+// --color-lavender-500, …) for light and dark mode, plus a few colours blended from them at build
+// time (no runtime color-mix(), so older Android browsers render it the same).
+// ============================================================================
+@use 'sass:color';
+@use 'sass:map';
+@use 'sass:math';
+
+$fs-light: (
+  paper: #fbf9f6,
+  ink: #211f2e,
+  muted: #6b6879,
+  line: #ebe6df,
+
+  lavender-50: #f4f1ff,
+  lavender-100: #ebe5ff,
+  lavender-300: #c3b5fb,
+  lavender-500: #7c68ee,
+  lavender-700: #5440c4,
+
+  peach-50: #fff4ee,
+  peach-100: #ffe6da,
+  peach-300: #fbbfa3,
+  peach-500: #ec7f58,
+  peach-700: #b9502c,
+
+  mint-50: #eefaf4,
+  mint-100: #d9f3e6,
+  mint-300: #96dcbb,
+  mint-500: #2fa676,
+  mint-700: #1d7a54,
+
+  sky-50: #eef6ff,
+  sky-100: #dcecff,
+  sky-300: #a6cbf6,
+  sky-500: #3f86d8,
+  sky-700: #285fa3,
+
+  butter-50: #fffaea,
+  butter-100: #fff2c7,
+  butter-300: #f6d77a,
+  butter-500: #d9a514,
+  butter-700: #94700a,
+);
+
+// Dark mode. sky-500 and butter-500 keep their light values (they already read well on dark paper).
+$fs-dark: map.merge($fs-light, (
+  paper: #18151f,
+  ink: #f8f5ef,
+  muted: #b7b1c2,
+  line: #393442,
+
+  lavender-50: #28233a,
+  lavender-100: #352e50,
+  lavender-300: #796ab3,
+  lavender-500: #a391ef,
+  lavender-700: #c2b5ff,
+
+  peach-50: #352720,
+  peach-100: #4a3428,
+  peach-300: #df9b79,
+  peach-500: #ec9b78,
+  peach-700: #ffc2a4,
+
+  mint-50: #1c3229,
+  mint-100: #284838,
+  mint-300: #74bf9d,
+  mint-500: #57bd91,
+  mint-700: #9be1c1,
+
+  sky-50: #1d2a3a,
+  sky-100: #27384d,
+  sky-300: #7ca8d3,
+  sky-700: #aecdf1,
+
+  butter-50: #3a3321,
+  butter-100: #4c4227,
+  butter-300: #dbc27d,
+  butter-700: #efd992,
+));
+
+@function fs($name) { @return map.get($fs-light, $name); }
+@function fs-dark($name) { @return map.get($fs-dark, $name); }
+// Same result as CSS color-mix(in srgb, $a $weight, $b), rounded to whole channels (prints as hex).
+@function fs-mix($a, $b, $weight: 50%) {
+  $c: color.mix($a, $b, $weight);
+  @return rgb(math.round(color.channel($c, 'red', $space: rgb)), math.round(color.channel($c, 'green', $space: rgb)),
+    math.round(color.channel($c, 'blue', $space: rgb)));
+}
+
+// Card surfaces: white on light paper; a step lighter than the paper in dark mode.
+@function fs-surface($P, $mode) { @return if($mode == light, #fff, fs-mix(map.get($P, ink), map.get($P, paper), 6%)); }
+@function fs-surface-2($P, $mode) {
+  @return if($mode == light, fs-mix(map.get($P, line), map.get($P, paper), 45%), fs-mix(map.get($P, ink), map.get($P, paper), 10%));
+}
+
+// Every variable that depends on the palette, for one colour mode.
+@mixin fs-theme($P, $mode) {
+  $ink: map.get($P, ink);
+  @each $name, $value in $P { --color-#{$name}: #{$value}; }
+
+  --fs-surface: #{fs-surface($P, $mode)};
+  --fs-surface-2: #{fs-surface-2($P, $mode)};
+  --fs-on-primary: #{if($mode == light, #fff, map.get($P, paper))};
+  // Secondary text on pastel banners (muted alone is 4.4:1 on lavender-100; this is 5.9:1).
+  --fs-muted-strong: #{fs-mix(map.get($P, muted), $ink, 70%)};
+  // Input borders: 3:1 against the card so the field edge stays visible.
+  --fs-border-input: #{fs-mix(map.get($P, muted), map.get($P, line), 70%)};
+  // Start of the primary button gradient (white text stays >= 5.3:1).
+  --fs-btn-start: #{fs-mix(map.get($P, lavender-500), map.get($P, lavender-700), 55%)};
+
+  // Text-safe inks for peach and butter (the 700s alone dip below 4.5:1 on their own tints).
+  --ink-peach: #{fs-mix(map.get($P, peach-700), $ink, 85%)};
+  --ink-butter: #{fs-mix(map.get($P, butter-700), $ink, 75%)};
+  // Two blends so all category colours stay distinct: lilac = lavender x peach, sand = peach x butter.
+  --tint-lilac: #{fs-mix(map.get($P, lavender-100), map.get($P, peach-100))};
+  --ink-lilac: #{fs-mix(map.get($P, lavender-700), map.get($P, peach-700))};
+  --accent-lilac: #{fs-mix(map.get($P, lavender-500), map.get($P, peach-500))};
+  --tint-sand: #{fs-mix(map.get($P, peach-100), map.get($P, butter-100))};
+  --ink-sand: #{fs-mix(fs-mix(map.get($P, peach-700), map.get($P, butter-700)), $ink, 80%)};
+  --accent-sand: #{fs-mix(map.get($P, peach-500), map.get($P, butter-500))};
+
+  // Illustration inks stay dark in both modes (hair, caps); paper follows the card surface.
+  --ill-ink: #{if($mode == light, map.get($P, ink), #0e0c14)};
+  --ill-ink-2: #{if($mode == light, fs-mix(map.get($P, ink), map.get($P, lavender-700), 75%), #2a2637)};
+  --ill-paper: #{fs-surface($P, $mode)};
+}

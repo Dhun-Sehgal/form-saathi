@@ -29,7 +29,7 @@
       <rect x="86" y="53" width="42" height="6" rx="3" style="fill: var(--ill-line)" />
       <rect x="86" y="64" width="28" height="6" rx="3" style="fill: var(--ill-mint-2)" />
       <rect x="66" y="82" width="62" height="6" rx="3" style="fill: var(--ill-line)" />
-      <circle cx="136" cy="88" r="21" fill="rgba(255,255,255,.55)" style="stroke: var(--ill-violet)" stroke-width="7" />
+      <circle cx="136" cy="88" r="21" style="fill: var(--ill-paper); fill-opacity: .55; stroke: var(--ill-violet)" stroke-width="7" />
       <line x1="151" y1="103" x2="168" y2="120" style="stroke: var(--ill-ink-2)" stroke-width="10" stroke-linecap="round" />
       <path d="M128 88 l6 6 l10 -12" fill="none" style="stroke: var(--ill-mint)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
     </g>
@@ -40,7 +40,7 @@
       <rect x="82" y="19" width="36" height="17" rx="7" style="fill: var(--ill-violet)" />
       <g v-for="(y, i) in [56, 80, 104]" :key="y">
         <circle cx="78" :cy="y" r="8.5" :style="i < 2 ? 'fill: var(--ill-mint)' : 'fill: none; stroke: var(--ill-violet-2)'" :stroke-width="i < 2 ? 0 : 2.5" />
-        <path v-if="i < 2" :d="`M73.5 ${y} l3 3 l5.5 -6`" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+        <path v-if="i < 2" :d="`M73.5 ${y} l3 3 l5.5 -6`" fill="none" style="stroke: var(--ill-paper)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
         <rect x="94" :y="y - 3.5" :width="i === 1 ? 26 : 36" height="7" rx="3.5" style="fill: var(--ill-line)" />
       </g>
       <g transform="translate(150 40) scale(.7)"><path d="M0 -12 C1.6 -3.2 3.2 -1.6 12 0 C3.2 1.6 1.6 3.2 0 12 C-1.6 3.2 -3.2 1.6 -12 0 C-3.2 -1.6 -1.6 -3.2 0 -12 Z" style="fill: var(--ill-yellow)" /></g>
@@ -99,7 +99,7 @@
         <rect x="130" y="70" width="32" height="5" rx="2.5" style="fill: var(--ill-violet-2)" />
         <rect x="130" y="80" width="24" height="5" rx="2.5" style="fill: var(--ill-line)" />
         <circle cx="156" cy="106" r="10" style="fill: var(--ill-yellow)" />
-        <path d="M151.5 106 l3 3 l5 -6" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M151.5 106 l3 3 l5 -6" fill="none" style="stroke: var(--ill-paper)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
       </g>
       <path d="M82 26 c-5 -3.5 -8 -6 -8 -9 a3.8 3.8 0 0 1 8 -1.4 a3.8 3.8 0 0 1 8 1.4 c0 3 -3 5.5 -8 9 z" style="fill: var(--ill-pink)" />
     </g>
@@ -112,7 +112,7 @@
       <rect x="74" y="70" width="44" height="6" rx="3" style="fill: var(--ill-line)" />
       <rect x="74" y="82" width="30" height="6" rx="3" style="fill: var(--ill-line)" />
       <circle cx="132" cy="108" r="22" style="fill: var(--ill-mint)" />
-      <path d="M121 108.5 l7.5 7.5 l14 -15" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M121 108.5 l7.5 7.5 l14 -15" fill="none" style="stroke: var(--ill-paper)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
       <g transform="rotate(-16 62 30)">
         <path d="M48 32 V40 Q62 46 76 40 V32 L62 37 Z" style="fill: var(--ill-ink-2)" />
         <path d="M62 18 L88 27 L62 36 L36 27 Z" style="fill: var(--ill-ink)" />

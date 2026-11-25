@@ -14,10 +14,11 @@ export const LABELS = {
 }
 export const label = (group, key) => (LABELS[group] && LABELS[group][key]) || (key ? String(key).replace(/_/g, ' ') : '')
 
-export const STATUS_COLORS = {
-  interested: '#A9A4C9', saved: '#B39DFF', preparing_documents: '#FFB020', ready_to_apply: '#36B6F5',
-  applied: '#6A4CF0', under_review: '#B86BFF', approved: '#1FB57F', rejected: '#E5484D',
-}
+// Status dot colours come from the palette (see --status-* in styles/main.scss); always shown next to the label.
+export const STATUS_COLORS = Object.fromEntries(
+  ['interested', 'saved', 'preparing_documents', 'ready_to_apply', 'applied', 'under_review', 'approved', 'rejected']
+    .map((s) => [s, `var(--status-${s})`]),
+)
 
 export function formatDate(value, opts = { day: 'numeric', month: 'short', year: 'numeric' }) {
   if (!value) return '—'

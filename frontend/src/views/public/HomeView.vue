@@ -110,7 +110,7 @@
         </div>
         <div class="col-lg-7 order-lg-1">
           <div class="position-relative py-3" aria-label="Example of the FormSaathi app on a phone" role="img">
-            <div class="hero-blob" style="width:min(380px, 80vw);height:min(380px, 80vw);background:#D9CEFF;top:40px;left:50%;transform:translateX(-50%);opacity:.7" />
+            <div class="hero-blob" style="width:min(380px, 80vw);height:min(380px, 80vw);background:var(--color-lavender-100);top:40px;left:50%;transform:translateX(-50%);opacity:.7" />
             <div class="phone">
               <div class="phone-notch" />
               <div class="phone-screen p-3 pt-5" aria-hidden="true">
@@ -276,14 +276,14 @@
         <div class="row align-items-center g-4">
           <div class="col-lg-7">
             <h2 class="section-title mb-2">Your opportunities are waiting.</h2>
-            <p class="mb-4" style="color: rgba(255,255,255,.9); font-size: 1.08rem">Create a free profile in 3 minutes. Optional details stay optional — and you can delete everything any time.</p>
+            <p class="mb-4 lead-text" style="font-size: 1.08rem">Create a free profile in 3 minutes. Optional details stay optional — and you can delete everything any time.</p>
             <div class="d-flex flex-wrap gap-2">
-              <router-link to="/register" class="btn btn-white btn-lg btn-pill">{{ t('hero.start') }} <ArrowRight :size="18" /></router-link>
+              <router-link to="/register" class="btn btn-primary btn-lg btn-pill">{{ t('hero.start') }} <ArrowRight :size="18" /></router-link>
               <router-link to="/explore" class="btn btn-glass btn-lg btn-pill">{{ t('hero.explore') }}</router-link>
             </div>
           </div>
           <div class="col-lg-5 d-none d-lg-block">
-            <div class="bg-surface rounded-xl p-3 mx-auto float" style="max-width: 300px; transform: rotate(3deg); box-shadow: 0 30px 60px -30px rgba(27,23,64,.6)"><SpotArt name="celebrate" /></div>
+            <div class="bg-surface rounded-xl p-3 mx-auto float" style="max-width: 300px; transform: rotate(3deg); box-shadow: var(--fs-shadow-lg)"><SpotArt name="celebrate" /></div>
           </div>
         </div>
       </div>

@@ -5,9 +5,9 @@
         <div class="flex-grow-1 min-w-0">
           <h1 class="page-title mb-1">ATS Resume Builder</h1>
           <p class="page-sub mb-3">Build a clean, one-column resume that applicant tracking systems can read — then check it against any internship or job on FormSaathi.</p>
-          <button class="btn btn-white btn-pill" :disabled="busy" @click="openNew"><Plus :size="17" /> New resume</button>
+          <button class="btn btn-primary btn-pill" :disabled="busy" @click="openNew"><Plus :size="17" /> New resume</button>
         </div>
-        <div class="d-none d-md-block flex-shrink-0 bg-surface rounded-xl p-2 float" style="transform: rotate(3deg); box-shadow: 0 24px 50px -28px rgba(27,23,64,.7)"><SpotArt name="checklist" style="width: 170px" /></div>
+        <div class="d-none d-md-block flex-shrink-0 bg-surface rounded-xl p-2 float" style="transform: rotate(3deg); box-shadow: var(--fs-shadow-lg)"><SpotArt name="checklist" style="width: 170px" /></div>
       </div>
     </section>
 
