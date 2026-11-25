@@ -10,7 +10,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 
 **Discover → Check eligibility → Understand requirements → Prepare documents → Apply → Track**
 
-[Live on Vercel](https://formsaathi.vercel.app) · [GitHub Pages mirror](https://anjalikokare.github.io/formsaathi/) · [Deploy the full app](#deploy-the-full-app) · [Architecture](docs/ARCHITECTURE.md) · [Database](docs/DATABASE.md) · [Design](docs/DESIGN.md)
+[Live on Vercel](https://formsaathi-app.vercel.app) · [GitHub Pages mirror](https://anjalikokare.github.io/formsaathi/) · [Deploy the full app](#deploy-the-full-app) · [Architecture](docs/ARCHITECTURE.md) · [Database](docs/DATABASE.md) · [Design](docs/DESIGN.md)
 
 </div>
 
@@ -20,7 +20,7 @@ An AI-assisted opportunity discovery and application assistant for Indian studen
 
 | | What it is | Data |
 |---|---|---|
-| **Live preview** — [Vercel](https://formsaathi.vercel.app) · [GitHub Pages](https://anjalikokare.github.io/formsaathi/) | The complete Vue app running **entirely in your browser** — a built-in mock of the API stores everything in `localStorage`/IndexedDB. Every page works: sign up, onboarding, discovery, eligibility, tracker, documents, calendar, admin panel. | Demo data only. Nothing leaves your browser. Saathi AI chat is off (no server). Admin login: `admin@formsaathi.demo` / `admin1234`. |
+| **Live preview** — [Vercel](https://formsaathi-app.vercel.app) · [GitHub Pages](https://anjalikokare.github.io/formsaathi/) | The complete Vue app running **entirely in your browser** — a built-in mock of the API stores everything in `localStorage`/IndexedDB. Every page works: sign up, onboarding, discovery, eligibility, tracker, documents, calendar, admin panel. | Demo data only. Nothing leaves your browser. Saathi AI chat is off (no server). Admin login: `admin@formsaathi.demo` / `admin1234`. |
 | **Full app (Flask + PostgreSQL)** | The real product: Flask REST API, PostgreSQL, secure cookie auth, private file storage, Saathi AI (with an API key), email (with SMTP). | Your database. Deploy with one click — see below. |
 
 ## Features
