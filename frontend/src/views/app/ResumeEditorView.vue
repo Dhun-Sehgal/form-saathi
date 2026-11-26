@@ -116,7 +116,7 @@
       <div v-show="isDesktop || tab !== 'edit'" class="col-lg-6">
         <div class="resume-side">
           <div class="d-none d-lg-flex gap-1 mb-3">
-            <button v-for="tb in mobileTabs.slice(1)" :key="tb.id" class="choice-chip" :class="{ active: panel === tb.id }" @click="panel = tb.id"><component :is="tb.icon" :size="15" /> {{ tb.label }}<span v-if="tb.id === 'ats'" class="fs-badge ms-1" :class="atsBadge">{{ report.passed }}/{{ report.total }}</span><span v-if="tb.id === 'match' && match" class="fs-badge fs-badge-ai ms-1">{{ match.percent }}%</span></button>
+            <button v-for="tb in mobileTabs.slice(1)" :key="tb.id" class="choice-chip" :class="{ active: panel === tb.id }" @click="panel = tb.id"><component :is="tb.icon" :size="15" /> {{ tb.label }}<span v-if="tb.id === 'ats'" class="fs-badge ms-1" :class="atsBadge">{{ report.score }}</span><span v-if="tb.id === 'match' && match" class="fs-badge fs-badge-ai ms-1">{{ match.percent }}%</span></button>
           </div>
 
           <div v-show="activePanel === 'preview'">
@@ -126,8 +126,8 @@
 
           <div v-show="activePanel === 'ats'" class="fs-card fs-card-pad">
             <div class="d-flex align-items-center gap-3 mb-3">
-              <ProgressRing :value="Math.round((report.passed / report.total) * 100)" :size="76" :stroke="8" />
-              <div><h2 class="h6 fw-bold mb-1">{{ report.passed }} of {{ report.total }} ATS checks passed</h2><p class="small text-muted mb-0">Transparent checks — not a made-up score. {{ report.stats.words }} words · {{ report.stats.bullets }} bullets · {{ report.stats.skills }} skills.</p></div>
+              <ProgressRing :value="report.score" :size="76" :stroke="8" />
+              <div><h2 class="h6 fw-bold mb-1">ATS score {{ report.score }}/100 · {{ band.label }}</h2><p class="small text-muted mb-0">{{ report.passed }} of {{ report.total }} ATS checks passed. Score = pass 1, warning ½, fail 0, averaged. {{ report.stats.words }} words · {{ report.stats.bullets }} bullets · {{ report.stats.skills }} skills.</p></div>
             </div>
             <ul class="list-unstyled mb-0">
               <li v-for="c in report.checks" :key="c.id" class="crit-row py-2">
@@ -179,7 +179,7 @@ import {
 } from 'lucide-vue-next'
 import api from '@/api'
 import { useUi } from '@/stores/ui'
-import { analyze, bulletIssues, emptyResume, matchKeywords, opportunityText, resumeText } from '@/utils/ats'
+import { analyze, bulletIssues, emptyResume, matchKeywords, opportunityText, resumeText, scoreBand } from '@/utils/ats'
 import { downloadText } from '@/utils/format'
 import { printResume, renderResumeHTML, RESUME_CSS } from '@/utils/resumeTemplate'
 import ProgressRing from '@/components/ProgressRing.vue'
@@ -204,7 +204,8 @@ const mobileTabs = [{ id: 'edit', label: 'Edit', icon: PenLine }, { id: 'preview
 const activePanel = computed(() => (isDesktop.value ? panel.value : tab.value))
 const html = computed(() => renderResumeHTML(d, r.template))
 const report = computed(() => analyze(d))
-const atsBadge = computed(() => (report.value.passed / report.value.total >= 0.8 ? 'fs-badge-verified' : 'fs-badge-pending'))
+const band = computed(() => scoreBand(report.value.score))
+const atsBadge = computed(() => `fs-badge-${band.value.tone}`)
 const match = computed(() => {
   const text = [jobText.value, detailText.value].filter(Boolean).join('\n')
   return text.trim() ? matchKeywords(d, text) : null

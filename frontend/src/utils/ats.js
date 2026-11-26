@@ -1,7 +1,8 @@
-// ATS readiness checks and job-keyword matching for the resume builder.
+// ATS readiness checks and job-keyword matching for the resume builder and the resume checker.
 // Deterministic and transparent: every check says what it looked at and why it matters.
-// There is no hidden "ATS score" — real applicant tracking systems differ, so we report
-// concrete, checkable signals that recruiters and ATS parsers commonly rely on.
+// The ATS score is nothing more than these checks added up (pass = 1, warning = ½, fail = 0,
+// all weighted equally) and is always shown next to them. Real applicant tracking systems
+// differ between companies, so the score is a readiness guide, not a prediction.
 
 export const ACTION_VERBS = new Set(`accelerated achieved analysed analyzed architected assessed audited authored automated balanced
 benchmarked boosted built calculated championed classified coached collaborated compiled completed composed configured consolidated
@@ -13,11 +14,14 @@ mentored merged migrated minimized modeled modelled monitored negotiated optimiz
 overhauled owned partnered piloted planned predicted presented prioritized processed produced programmed prototyped published raised
 ranked re-architected rebuilt recommended redesigned reduced refactored resolved restructured revamped scaled scheduled scoped
 secured shipped simplified solved spearheaded standardized streamlined strengthened structured supervised supported surfaced
-synthesized taught tested tracked trained transformed translated troubleshot tuned unified upgraded validated visualized won wrote`
+synthesized taught tested tracked trained transformed translated troubleshot tuned unified upgraded validated visualized won wrote
+earned competed conducted researched drafted edited interviewed performed represented served tutored volunteered`
   .split(/\s+/).filter(Boolean))
 
 const WEAK_STARTS = ['responsible for', 'worked on', 'helped', 'assisted', 'involved in', 'participated in', 'tasked with', 'duties included', 'in charge of']
-const FIRST_PERSON = /\b(i|me|my|mine|myself)\b/i
+// "I" counts as first person at the start of a sentence or after a lowercase word ("and I built"),
+// so roman numerals after a name ("MAD I and II", "Part I") don't.
+const FIRST_PERSON = /\b(?:[Mm]e|[Mm]y|[Mm]ine|[Mm]yself)\b|(?:^|[.!?;:]\s+|\b[a-z]+\s+)I\s+[a-z]|\bi\s+[a-z]/
 const NUMBER = /(\d|%|₹|\$|\blakh\b|\bcrore\b|\bk\b)/i
 
 const STOPWORDS = new Set(`a about above after again against all also am an and any are as at be because been before being below between both
@@ -151,8 +155,149 @@ export function analyze(d) {
     { id: 'format', label: 'ATS-safe layout', status: 'pass', detail: 'Single column, standard headings, real selectable text — no tables, images or icons.' },
   ]
   const tips = bullets.map((x) => ({ ...x, issues: bulletIssues(x.text) })).filter((x) => x.issues.length)
-  return { checks, passed: checks.filter((c) => c.status === 'pass').length, total: checks.length, tips,
+  return { checks, passed: checks.filter((c) => c.status === 'pass').length, total: checks.length, score: scoreOf(checks), tips,
     stats: { words: totalWords, bullets: bullets.length, skills } }
+}
+
+/** One score out of 100 from the checks: pass = 1, warning = ½, fail = 0, every check weighted equally. */
+export function scoreOf(checks) {
+  if (!checks.length) return 0
+  const points = checks.reduce((sum, c) => sum + (c.status === 'pass' ? 1 : c.status === 'warn' ? 0.5 : 0), 0)
+  return Math.round((points / checks.length) * 100)
+}
+
+export function scoreBand(score) {
+  if (score >= 85) return { label: 'Excellent', tone: 'verified' }
+  if (score >= 70) return { label: 'Good', tone: 'verified' }
+  if (score >= 50) return { label: 'Needs work', tone: 'pending' }
+  return { label: 'Weak', tone: 'danger' }
+}
+
+// ---- Checking an existing resume from its extracted text ---------------------------------------
+// Broken glyphs: the replacement character, private-use (icon font) characters and stray control characters.
+const BROKEN = '\\uFFFD\\uE000-\\uF8FF\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F-\\u009F'
+const BULLET_START = new RegExp(`^[•·▪●◦○■□▸►▶➢➤✓✔*\\-–—${BROKEN}]\\s*`)
+const BROKEN_START = new RegExp(`^[${BROKEN}]`)
+const JUNK = new RegExp(`[${BROKEN}]`, 'g')
+const YEAR = /\b(19|20)\d{2}\b/g
+const PHONE = /\+?\d[\d\s().-]{8,}\d/
+const HEADINGS = {
+  summary: /^(professional |career |personal )?(summary|profile|objective|about me|about)$/,
+  experience: /^(work |professional |relevant |internship )?(experience|experiences|employment|employment history|work history|internships?)$/,
+  projects: /^(academic |personal |key |selected |major )?projects?$/,
+  education: /^(education|educational background|academics|academic background|academic details|academic qualifications?|qualifications?)$/,
+  skills: /^(technical |key |core |professional )?(skills|skill set|skills and tools|skills & tools|competencies|technologies|tech stack)$/,
+  achievements: /^(achievements?|awards?|awards (and|&) achievements|honou?rs|honou?rs (and|&) awards|accomplishments?)$/,
+  certifications: /^(certifications?|certificates?|courses|licenses (and|&) certifications)$/,
+}
+
+/** Which standard resume section a line is the heading of, if any. */
+export function sectionOf(line) {
+  const l = line.toLowerCase().replace(/[^a-z& ]/g, ' ').replace(/\s+/g, ' ').trim()
+  if (!l || l.split(' ').length > 5) return null
+  return Object.keys(HEADINGS).find((k) => HEADINGS[k].test(l)) || null
+}
+
+const looksLikeEntryTitle = (line) => /\b(19|20)\d{2}\b|\bpresent\b|\||github|\bremote\b/i.test(line)
+
+/**
+ * Checks for a resume you already have, using only its text — roughly what an ATS parser reads.
+ * meta: { pages } from readResumeFile.
+ */
+export function analyzeText(rawText, meta = {}) {
+  const text = clean(rawText)
+  const pages = meta.pages ?? null
+  const letters = (text.match(/[a-zऀ-ॿ]/gi) || []).length
+  if (letters < 200) {
+    const checks = [{ id: 'readable', label: 'Text can be read', status: 'fail',
+      detail: letters
+        ? 'Very little text came out of this file. If it is a scanned image or a photo, an ATS cannot read it either — export the resume as a text PDF from Word, Google Docs or this builder.'
+        : 'No text came out of this file — it is probably a scanned image or a photo. An ATS cannot read it either.' }]
+    return { checks, passed: 0, total: 1, score: 0, unreadable: true, tips: [], sections: [], stats: { words: words(text).length, bullets: 0, skills: 0, pages } }
+  }
+
+  // Split into sections by standard headings.
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
+  const sections = { header: [] }
+  const order = []
+  let current = 'header'
+  for (const line of lines) {
+    const key = sectionOf(line)
+    if (key) { current = key; sections[key] = sections[key] || []; if (!order.includes(key)) order.push(key); continue }
+    ;(sections[current] = sections[current] || []).push(line)
+  }
+
+  // Bullets in experience and projects (achievements are facts, not action bullets); wrapped lines rejoin their bullet.
+  const bullets = []
+  for (const key of ['experience', 'projects']) {
+    let last = null, sawMarker = false
+    for (const line of sections[key] || []) {
+      if (BULLET_START.test(line)) { last = { section: key, text: line.replace(BULLET_START, '').trim() }; bullets.push(last); sawMarker = true }
+      else if (last && !looksLikeEntryTitle(line)) last.text += ` ${line}`
+      else last = null
+    }
+    if (!sawMarker) for (const line of sections[key] || []) if (!looksLikeEntryTitle(line) && words(line).length >= 8) bullets.push({ section: key, text: line })
+  }
+
+  const totalWords = words(text).length
+  const junkBullets = lines.filter((l) => BROKEN_START.test(l)).length
+  const junkInline = (text.match(JUNK) || []).length - junkBullets
+  const email = /[^\s@|,;:()]+@[^\s@|,;:()]+\.[a-z]{2,}/i.test(text)
+  const phoneMatch = text.match(PHONE)
+  const phone = !!phoneMatch && phoneMatch[0].replace(/\D/g, '').length >= 10
+  const links = /(linkedin\.com|github\.com|https?:\/\/|www\.|\blinkedin\b|\bgithub\b|\bportfolio\b)/i.test(text)
+  const core = ['education', 'skills'].filter((k) => sections[k]).length + (sections.experience || sections.projects ? 1 : 0)
+  const summaryWords = words((sections.summary || []).join(' ')).length
+  const verbShare = bullets.length ? bullets.filter((b) => startsWithActionVerb(b.text)).length / bullets.length : 0
+  const numShare = bullets.length ? bullets.filter((b) => NUMBER.test(b.text)).length / bullets.length : 0
+  const longOnes = bullets.filter((b) => words(b.text).length > 35).length
+  const firstPerson = FIRST_PERSON.test([...(sections.summary || []), ...bullets.map((b) => b.text)].join(' '))
+  const years = (text.match(YEAR) || []).length
+  const skillItems = (sections.skills || []).flatMap((l) => (l.includes(':') ? l.slice(l.indexOf(':') + 1) : l).split(/[,;|•·]/)).map(clean).filter((x) => x && x.length < 40)
+  const pct = (x) => `${Math.round(x * 100)}%`
+  const found = order.map((k) => k[0].toUpperCase() + k.slice(1))
+
+  const checks = [
+    { id: 'readable', label: 'Text can be read', status: 'pass', detail: `${totalWords} words of real, selectable text.` },
+    { id: 'clean_chars', label: 'Characters read cleanly', status: junkInline > 20 ? 'fail' : junkInline > 3 || junkBullets ? 'warn' : 'pass',
+      detail: junkInline > 3 ? `${junkInline} characters did not come through (icon fonts, symbols or special bullets). An ATS may show them as junk.`
+        : junkBullets ? 'Bullet symbols came out as “�”. Use plain round bullets (•) or hyphens.' : 'No broken symbols or icon fonts.' },
+    { id: 'contact', label: 'Email address', status: email ? 'pass' : 'fail', detail: email ? 'Found.' : 'No email address found — recruiters need one to reach you.' },
+    { id: 'phone', label: 'Phone number', status: phone ? 'pass' : 'warn', detail: phone ? 'Found.' : 'No phone number found — most Indian recruiters call first.' },
+    { id: 'links', label: 'Profile links', status: links ? 'pass' : 'warn', detail: links ? 'LinkedIn / GitHub / portfolio found.' : 'Add a LinkedIn, GitHub or portfolio link.' },
+    { id: 'headings', label: 'Standard section headings', status: core >= 3 ? 'pass' : core === 2 ? 'warn' : 'fail',
+      detail: found.length
+        ? `Found: ${found.join(', ')}.${core < 3 ? ' Use plain headings such as Experience, Education and Skills so an ATS can sort your details.' : ''}`
+        : 'No standard headings found. Use plain headings such as Experience, Projects, Education and Skills.' },
+    { id: 'summary', label: 'Professional summary', status: summaryWords >= 20 && summaryWords <= 80 ? 'pass' : 'warn',
+      detail: !sections.summary ? 'No summary section — add 2–3 lines on who you are and what you do.'
+        : summaryWords > 80 ? `${summaryWords} words — keep it under 80.` : summaryWords < 20 ? `${summaryWords} words — a little short; aim for 20–80.` : `${summaryWords} words.` },
+    { id: 'experience', label: 'Experience or projects', status: sections.experience || sections.projects ? 'pass' : 'fail',
+      detail: sections.experience || sections.projects ? `${bullets.length} bullet point${bullets.length === 1 ? '' : 's'} found.` : 'No Experience, Internships or Projects section found.' },
+    { id: 'action_verbs', label: 'Bullets start with action verbs', status: !bullets.length ? 'warn' : verbShare >= 0.7 ? 'pass' : verbShare >= 0.4 ? 'warn' : 'fail',
+      detail: bullets.length ? `${pct(verbShare)} of bullets (aim for 70%+).` : 'No bullet points found.' },
+    { id: 'quantified', label: 'Results are quantified', status: !bullets.length ? 'warn' : numShare >= 0.4 ? 'pass' : numShare >= 0.2 ? 'warn' : 'fail',
+      detail: bullets.length ? `${pct(numShare)} of bullets have a number (aim for 40%+). Only use real numbers.` : 'No bullet points found.' },
+    { id: 'bullet_length', label: 'Bullets are concise', status: longOnes ? 'warn' : 'pass', detail: longOnes ? `${longOnes} bullet(s) over 35 words.` : 'All bullets under 35 words.' },
+    { id: 'first_person', label: 'No “I / my”', status: firstPerson ? 'warn' : 'pass', detail: firstPerson ? 'Write in resume style without first person.' : 'Resume style throughout.' },
+    { id: 'dates', label: 'Dates on experience and education', status: years >= 2 ? 'pass' : 'warn', detail: years >= 2 ? 'Dates found.' : 'Few or no dates found — add month and year to each entry.' },
+    { id: 'skills', label: 'Skills section', status: !sections.skills ? 'fail' : skillItems.length >= 6 ? 'pass' : 'warn',
+      detail: !sections.skills ? 'No Skills section — ATS systems match skills by keyword.' : `${skillItems.length} skills listed${skillItems.length < 6 ? ' — add the tools you actually use (aim for 6+).' : '.'}` },
+    { id: 'length', label: 'Length', status: (pages && pages > 2) || totalWords > 900 || totalWords < 180 ? 'warn' : 'pass',
+      detail: `${totalWords} words${pages ? ` · ${pages} page${pages === 1 ? '' : 's'}` : ''}${pages && pages > 2 ? ' — keep it to 1–2 pages.' : totalWords > 900 ? ' — likely too long for a student resume.' : totalWords < 180 ? ' — add more detail.' : '.'}` },
+  ]
+  const tips = bullets.map((b, i) => ({ ...b, i, issues: bulletIssues(b.text) })).filter((b) => b.issues.length)
+  return { checks, passed: checks.filter((c) => c.status === 'pass').length, total: checks.length, score: scoreOf(checks), unreadable: false,
+    tips, sections: order, stats: { words: totalWords, bullets: bullets.length, skills: skillItems.length, pages } }
+}
+
+/** Keyword match for raw resume text (the checker) — same rules as matchKeywords. */
+export function matchKeywordsText(text, jobText) {
+  const keywords = extractKeywords(jobText)
+  const hay = clean(text).toLowerCase()
+  const matched = keywords.filter((k) => containsKeyword(hay, k))
+  const missing = keywords.filter((k) => !matched.includes(k))
+  return { keywords, matched, missing, percent: keywords.length ? Math.round((matched.length / keywords.length) * 100) : 0 }
 }
 
 /** Important words and phrases from a job description or opportunity, most frequent first. */

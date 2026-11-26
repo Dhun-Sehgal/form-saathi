@@ -46,7 +46,8 @@
             </ul>
             <div class="plate-tags"><span v-for="tag in p.tags" :key="tag" class="pill">{{ tag }}</span></div>
             <div class="plate-foot">
-              <span class="small text-muted">{{ p.note }}</span>
+              <router-link v-if="p.noteTo" :to="p.noteTo" class="small fw-semibold">{{ p.note }} →</router-link>
+              <span v-else class="small text-muted">{{ p.note }}</span>
               <router-link :to="p.to" class="btn btn-primary btn-sm btn-pill">{{ p.cta }} <ArrowRight :size="15" /></router-link>
             </div>
           </article>
@@ -218,9 +219,9 @@ const pillars = computed(() => [
   {
     color: 'butter', icon: ScrollText, stat: atsChecks, statLabel: 'resume checks',
     title: 'ATS resume builder',
-    text: 'Build a clean one-column resume that applicant tracking systems can read, then match it to any internship or job.',
-    points: [`${atsChecks} transparent readiness checks`, 'Keyword match for any opportunity', 'PDF and text export'],
-    tags: ['Resume', 'ATS', 'PDF'], note: 'Starts from your profile', cta: 'Build resume', to: '/app/resume',
+    text: 'Build a clean one-column resume that applicant tracking systems can read — or upload yours to see its ATS score and what to fix.',
+    points: [`${atsChecks} transparent readiness checks and a score out of 100`, 'Upload the resume you already have to check it', 'Keyword match for any opportunity'],
+    tags: ['Resume', 'ATS score', 'PDF'], note: 'Check an existing resume', noteTo: '/app/resume/check', cta: 'Build resume', to: '/app/resume',
   },
 ])
 

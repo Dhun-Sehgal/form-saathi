@@ -33,6 +33,7 @@ const routes = [
   app('/app/calendar', 'calendar', () => import('@/views/app/CalendarView.vue'), { title: 'Calendar' }),
   app('/app/documents', 'documents', () => import('@/views/app/DocumentsView.vue'), { title: 'Documents' }),
   app('/app/resume', 'resumes', () => import('@/views/app/ResumeListView.vue'), { title: 'ATS Resume Builder' }),
+  app('/app/resume/check', 'resume-check', () => import('@/views/app/ResumeCheckView.vue'), { title: 'Check resume ATS score' }),
   app('/app/resume/:id', 'resume-editor', () => import('@/views/app/ResumeEditorView.vue'), { title: 'Edit resume' }),
   app('/app/saathi', 'saathi', () => import('@/views/app/SaathiView.vue'), { title: 'Saathi AI' }),
   app('/app/notifications', 'notifications', () => import('@/views/app/NotificationsView.vue'), { title: 'Notifications' }),
